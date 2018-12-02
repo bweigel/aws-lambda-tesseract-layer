@@ -1,0 +1,4 @@
+.serverless/
+layer
+node_modules/
+.mypy_cache/

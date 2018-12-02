@@ -1,0 +1,28 @@
+service: tesseract-ocr-example
+frameworkVersion: ">=1.34.0 <2.0.0"
+
+plugins:
+    - serverless-python-requirements
+    - serverless-pseudo-parameters
+
+provider:
+  name: aws
+  runtime: python3.6
+  region: eu-central-1
+
+custom:
+  pythonRequirements:
+    # disable slim; strip might be broken => leads to error: /var/task/PIL/_imaging.cpython-36m-x86_64-linux-gnu.so: ELF load command address/offset not properly aligned
+    # slim: true
+
+
+functions:
+  tesseract-ocr:
+    handler: handler.main
+    layers:
+      # Update this ARN after you've deployed the tesseract layer
+      - arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:layer:tesseract:1
+    events:
+      - http:
+          path: ocr
+          method: post
