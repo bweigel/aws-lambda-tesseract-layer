@@ -16,11 +16,15 @@ ARG TESSERACT_SUFFIX=_fast
 
 The library files that are content of the layer are stripped, before deployment to make them more suitable for the lambda environment.
 
-## Deploy layer
+## Build &  Deploy layer
 
-```bash
+```shell
+# Build Layer components
+./build.sh
+# Deploy via Serverless
 sls deploy
 ```
+
 ## How to use
 
 There is an [example](./example) included for how to use this with the [Serverless Framework](https://serverless.com/).
