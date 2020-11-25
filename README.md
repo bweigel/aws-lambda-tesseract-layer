@@ -29,7 +29,10 @@ sls deploy
 
 ## How to use
 
-There is an [example](./example) included for how to use this with the [Serverless Framework](https://serverless.com/).
+There is an [example](./example) included for how to use this with the [Serverless Framework](https://serverless.com/). Follow instructions below.
+
+## Avoiding Pillow library issues
+Use [cloud9 IDE](https://aws.amazon.com/cloud9/) with AMI linux to deploy [example](./example). Or alternately follow instructions for getting correct binaries for lambda using [EC2](https://forums.aws.amazon.com/thread.jspa?messageID=915630). AWS lambda uses AMI linux distro which needs correct python binaries. This step is not needed for deploying layer function. Layer function and example function are separately deployed.
 
 ## Misc: Layer contents
 
