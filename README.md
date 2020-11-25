@@ -84,3 +84,41 @@ drwxr-xr-x 3 bweigel bweigel     4096 Dez  2 22:42 ..
 -rw-r--r-- 1 bweigel bweigel  4113088 Dez  2 22:42 eng.traineddata
 -rw-r--r-- 1 bweigel bweigel 10562727 Dez  2 22:42 osd.traineddata
 ```
+
+## Known Issues
+
+### Unable to import module 'handler': cannot import name '_imaging'
+
+You might run into an issue like this:
+
+```
+/var/task/PIL/_imaging.cpython-36m-x86_64-linux-gnu.so: ELF load command address/offset not properly aligned  
+Unable to import module 'handler': cannot import name '_imaging'
+```
+
+The root cause is a faulty stripping of libraries using [`strip`](https://man7.org/linux/man-pages/man1/strip.1.html) [here](https://github.com/bweigel/aws-lambda-tesseract-layer/blob/42b725f653520b2b4d7081998ef8dca6b9b9d7df/Dockerfile#L46). 
+
+**Quickfix**
+> You can just disable stripping (comment out the line in the `Dockerfile`) and the libraries (`*.so`) won't be stripped. This also means the library files will be larger and your artifact might exceed lambda limits.
+
+**A lenghtier fix**
+
+AWS Lambda Runtimes work on top of Amazon Linux. Depending on the Runtime AWS Lambda uses Amazon Linux Version 1 or Version 2 under the hood. 
+For example the Python 3.8 Runtime uses Amazon Linux 2, whereas Python <= 3.7 uses version 1.
+
+The current Dockerfile runs on top of Amazon Linux Version 1. So artifacts for runtimes running version 2 will throw the above error. 
+You can try and use a base Dockerimage for Amazon Linux 2 in these cases:
+
+```Dockerfile
+FROM: lambci/lambda-base-2:build
+...
+```
+
+or, as @secretshardul suggested
+
+>simple solution: Use AWS cloud9 to deploy example folder. Layer can be deployed from anywhere.
+>complex solution: Deploy EC2 instance with AMI linux and get correct binaries.
+
+## Contributors :heart:
+
+- @secretshardul 
