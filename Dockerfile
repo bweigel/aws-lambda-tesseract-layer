@@ -1,4 +1,4 @@
-FROM lambci/lambda-base:build
+FROM lambci/lambda-base-2:build
 
 ARG LEPTONICA_VERSION=1.78.0
 ARG TESSERACT_VERSION=4.1.0-rc4
@@ -41,7 +41,12 @@ RUN mkdir -p ${DIST}/lib && mkdir -p ${DIST}/bin && \
     cp ${TESSERACT}/bin/tesseract ${DIST}/bin/ && \
     cp ${TESSERACT}/lib/libtesseract.so.4  ${DIST}/lib/ && \
     cp ${LEPTONICA}/lib/liblept.so.5 ${DIST}/lib/liblept.so.5 && \
+    cp /usr/lib64/libgomp.so.1 ${DIST}/lib/ && \
     cp /usr/lib64/libwebp.so.4 ${DIST}/lib/ && \
+    cp /usr/lib64/libpng15.so.15 ${DIST}/lib/ && \
+    cp /usr/lib64/libjpeg.so.62 ${DIST}/lib/ && \
+    cp /usr/lib64/libtiff.so.5 ${DIST}/lib/ && \
+    cp /usr/lib64/libjbig.so.2.0 ${DIST}/lib/ && \
     echo -e "LEPTONICA_VERSION=${LEPTONICA_VERSION}\nTESSERACT_VERSION=${TESSERACT_VERSION}\nTESSERACT_DATA_FILES=tessdata${TESSERACT_DATA_SUFFIX}/${TESSERACT_DATA_VERSION}" > ${DIST}/TESSERACT-README.md && \
     find ${DIST}/lib -name '*.so*' | xargs strip -s
 
