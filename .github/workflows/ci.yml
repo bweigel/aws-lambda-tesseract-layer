@@ -2,12 +2,12 @@ name: Continuos Integration
 on:
   push:
     paths:
-      - 'Dockerfile'
+      - 'Dockerfile*'
     branches:
       - master
   pull_request:
     paths:
-      - 'Dockerfile'
+      - 'Dockerfile*'
 
 jobs:
   test:
