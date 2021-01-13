@@ -47,7 +47,7 @@ new lambda.Function(stack, 'python3.6', {
 const al2Layer = new lambda.LayerVersion(stack, 'al2-layer', {
     code: Code.fromAsset(pathToLayerSource, {
     bundling: {
-        image: BundlingDockerImage.fromAsset(pathToLayerSource, { file: 'Dockerfile' }),
+        image: BundlingDockerImage.fromAsset(pathToLayerSource, { file: '../Dockerfile' }),
         command: ['/bin/bash', '-c', 'cp -r /opt/build-dist/. /asset-output/'],
     },
     }),
