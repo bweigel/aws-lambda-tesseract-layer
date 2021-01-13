@@ -5,9 +5,7 @@ on:
       - 'Dockerfile*'
     branches:
       - master
-  pull_request:
-    paths:
-      - 'Dockerfile*'
+  pull_request: {}
 
 jobs:
   test:
