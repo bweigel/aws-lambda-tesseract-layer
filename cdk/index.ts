@@ -1,7 +1,7 @@
 import * as lambda from '@aws-cdk/aws-lambda';
 import { Code, Runtime } from '@aws-cdk/aws-lambda';
 import * as path from 'path';
-import { App, BundlingDockerImage, Stack } from '@aws-cdk/core';
+import { App, BundlingDockerImage, Duration, Stack } from '@aws-cdk/core';
 
 
 const app = new App();
@@ -35,6 +35,8 @@ new lambda.Function(stack, 'python3.6', {
     }),
     runtime: Runtime.PYTHON_3_6,
     layers: [al1Layer],
+    memorySize: 512,
+    timeout: Duration.seconds(30),
     functionName: `al1-py36`,
     handler: 'handler.main',
 });
@@ -66,6 +68,8 @@ new lambda.Function(stack, 'python3.8', {
     runtime: Runtime.PYTHON_3_8,
     layers: [al1Layer],
     functionName: `al2-py38`,
+    memorySize: 512,
+    timeout: Duration.seconds(30),
     handler: 'handler.main',
 });
 
