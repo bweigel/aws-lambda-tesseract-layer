@@ -1,0 +1,18 @@
+name: Continuos Integration
+on:
+  push:
+    paths:
+      - 'Dockerfile'
+    branches:
+      - master
+  pull_request:
+    paths:
+      - 'Dockerfile'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Test Build (en - fast)
+      run: docker build -t tesseract:en-fast --build-arg OCR_LANG=en --build-arg TESSERACT_SUFFIX=_fast .
