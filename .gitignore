@@ -2,3 +2,5 @@
 layer
 node_modules/
 .mypy_cache/
+cdk.out
+*test-output.txt

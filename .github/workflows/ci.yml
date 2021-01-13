@@ -12,7 +12,26 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cdk
     steps:
     - uses: actions/checkout@v1
-    - name: Test Build (en - fast)
-      run: docker build -t tesseract:en-fast --build-arg OCR_LANG=en --build-arg TESSERACT_SUFFIX=_fast .
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: Setup Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Install AWS SAM CLI
+      run:  pip install aws-sam-cli
+    - name: NPM CI
+      run: npm ci
+    - name: CDK Synth
+      run: npx cdk synth
+    - name: Run integration test against Amazon Linux 1 (Lambda@Python 3.6)
+      run: npm run test:integration:al1
+    - name: Run integration test against Amazon Linux 2 (Lambda@Python 3.8)
+      run: npm run test:integration:al2
