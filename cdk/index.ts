@@ -44,15 +44,15 @@ new lambda.Function(stack, 'python3.6', {
 /**
  * Test setup and artifacts for AL 2
  */
-// const al2Layer = new lambda.LayerVersion(stack, 'al2-layer', {
-//     code: Code.fromAsset(pathToLayerSource, {
-//     bundling: {
-//         image: BundlingDockerImage.fromAsset(pathToLayerSource),
-//         command: ['/bin/bash', '-c', 'cp -r /opt/build-dist/. /asset-output/'],
-//     },
-//     }),
-//     description: 'AL1 Tesseract Layer',
-// });
+const al2Layer = new lambda.LayerVersion(stack, 'al2-layer', {
+    code: Code.fromAsset(pathToLayerSource, {
+    bundling: {
+        image: BundlingDockerImage.fromAsset(pathToLayerSource, { file: 'Dockerfile' }),
+        command: ['/bin/bash', '-c', 'cp -r /opt/build-dist/. /asset-output/'],
+    },
+    }),
+    description: 'AL2 Tesseract Layer',
+});
 new lambda.Function(stack, 'python3.8', {
     code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda-handlers'),
     {
@@ -66,7 +66,7 @@ new lambda.Function(stack, 'python3.8', {
         }
     }),
     runtime: Runtime.PYTHON_3_8,
-    layers: [al1Layer],
+    layers: [al2Layer],
     functionName: `al2-py38`,
     memorySize: 512,
     timeout: Duration.seconds(30),
