@@ -19,7 +19,7 @@
   "scripts": {
     "synth": "npx cdk synth",
     "test:integration:al1": "sam local invoke -t cdk.out/tesseract-lambda-test.template.json al1-py36 --no-event > al1-test-output.txt && cat al1-test-output.txt | grep -Eiv \"(fail|error|exception)\"",
-    "test:integration:al2": "sam local invoke -t cdk.out/tesseract-lambda-test.template.json al1-py38 --no-event > al2-test-output.txt && cat al2-test-output.txt | grep -Eiv \"(fail|error|exception)\""
+    "test:integration:al2": "sam local invoke -t cdk.out/tesseract-lambda-test.template.json al2-py38 --no-event > al2-test-output.txt && cat al2-test-output.txt | grep -Eiv \"(fail|error|exception)\""
   },
   "jest": {
     "transform": {
