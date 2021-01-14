@@ -1,0 +1,49 @@
+{
+  "name": "cdk-tesseract-layer-test",
+  "version": "0.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "private": true,
+  "files": [
+    "dist/**",
+    "package.json",
+    "README.md"
+  ],
+  "author": "Benjamin Genz (@bweigel)",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bweigel/aws-lambda-tesseract-layer.git"
+  },
+  "scripts": {
+    "synth": "npx cdk synth",
+    "test:integration:al1": "sam local invoke -t cdk.out/tesseract-lambda-test.template.json al1-py36 --no-event > al1-test-output.txt && cat al1-test-output.txt | grep -Eiv \"(fail|error|exception)\"",
+    "test:integration:al2": "sam local invoke -t cdk.out/tesseract-lambda-test.template.json al2-py38 --no-event > al2-test-output.txt && cat al2-test-output.txt | grep -Eiv \"(fail|error|exception)\""
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "roots": [
+      "<rootDir>/test"
+    ],
+    "testMatch": [
+      "**/*.test.ts"
+    ]
+  },
+  "devDependencies": {
+    "@aws-cdk/assert": "^1.72.0",
+    "@aws-cdk/aws-lambda": "^1.72.0",
+    "@aws-cdk/core": "^1.72.0",
+    "@types/jest": "^26.0.14",
+    "@types/node": "^14.11.5",
+    "aws-cdk": "^1.66.0",
+    "constructs": "^3.0.8",
+    "jest-cdk-snapshot": "^1.4.1",
+    "jest": "^26.5.2",
+    "source-map-support": "^0.5.19",
+    "ts-jest": "^26.4.1",
+    "typescript": "~4.0.3"
+  }
+}
