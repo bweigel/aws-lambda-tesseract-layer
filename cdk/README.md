@@ -1,4 +1,6 @@
-This is used for integration testing purposes.
+> This is used for integration testing and bundling purposes.
+
+## Integration Testing
 
 A simple CDK template uses the `Dockerfile` to bundle a layer containing tesseract.
 
@@ -18,3 +20,8 @@ npm npm run test:integration:al1
 ## run integration test using AL2 & Python 3.8
 npm npm run test:integration:al2
 ```
+
+## Bundling
+
+After `npx cdk synth` was executed bundles of the binary can be created with `npm run bundle:binary:al1`.
+The bundles will be put into the `ready-to-use` folder.

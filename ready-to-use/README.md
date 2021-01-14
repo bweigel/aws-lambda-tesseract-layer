@@ -1,0 +1,1 @@
+Contains ready-to-use binaries for Tesseract for [Lambda runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html) using Amazon Linux 1 and Amazon Linux 2.

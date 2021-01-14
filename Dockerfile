@@ -42,7 +42,7 @@ RUN mkdir -p ${DIST}/lib && mkdir -p ${DIST}/bin && \
     cp ${TESSERACT}/lib/libtesseract.so.4  ${DIST}/lib/ && \
     cp ${LEPTONICA}/lib/liblept.so.5 ${DIST}/lib/liblept.so.5 && \
     cp /usr/lib64/libwebp.so.4 ${DIST}/lib/ && \
-    echo -e "LEPTONICA_VERSION=${LEPTONICA_VERSION}\nTESSERACT_VERSION=${TESSERACT_VERSION}\nTESSERACT_DATA_FILES=tessdata${TESSERACT_DATA_SUFFIX}/${TESSERACT_DATA_VERSION}" > ${DIST}/TESSERACT-README.md && \
+    echo -e "LEPTONICA_VERSION=${LEPTONICA_VERSION}\nTESSERACT_VERSION=${TESSERACT_VERSION}\nTESSERACT_DATA_FILES=tessdata${TESSERACT_DATA_SUFFIX}/${TESSERACT_DATA_VERSION}\nTESSERACT_DATA_LANGUAGES=osd,eng,${OCR_LANG}" > ${DIST}/TESSERACT-README.md && \
     find ${DIST}/lib -name '*.so*' | xargs strip -s
 
 WORKDIR ${DIST}/tesseract/share/tessdata

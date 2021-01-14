@@ -1,5 +1,5 @@
 import * as lambda from '@aws-cdk/aws-lambda';
-import { Code, Runtime } from '@aws-cdk/aws-lambda';
+import { CfnLayerVersion, Code, Runtime } from '@aws-cdk/aws-lambda';
 import * as path from 'path';
 import { App, BundlingDockerImage, Duration, Stack } from '@aws-cdk/core';
 
@@ -20,6 +20,7 @@ const al1Layer = new lambda.LayerVersion(stack, 'al1-layer', {
     }),
     description: 'AL1 Tesseract Layer',
 });
+stack.renameLogicalId(stack.getLogicalId(al1Layer.node.defaultChild as CfnLayerVersion), 'al1layer')
 
 new lambda.Function(stack, 'python3.6', {
     code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda-handlers'),
@@ -53,6 +54,7 @@ const al2Layer = new lambda.LayerVersion(stack, 'al2-layer', {
     }),
     description: 'AL2 Tesseract Layer',
 });
+stack.renameLogicalId(stack.getLogicalId(al2Layer.node.defaultChild as CfnLayerVersion), 'al2layer')
 new lambda.Function(stack, 'python3.8', {
     code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda-handlers'),
     {
