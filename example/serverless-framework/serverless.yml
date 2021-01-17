@@ -15,6 +15,7 @@ custom:
 
 layers:
   tesseractAl1:
+    # specify path to layer content
     path: ../../ready-to-use/amazonlinux-1
     compatibleRuntimes:
       - python3.6
