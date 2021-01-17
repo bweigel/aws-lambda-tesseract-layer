@@ -12,7 +12,6 @@ custom:
   pythonRequirements:
     dockerizePip: true
     dockerFile: Dockerfile
-    #slim: true
 
 layers:
   tesseractAl1:
