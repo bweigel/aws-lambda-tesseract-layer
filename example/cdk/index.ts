@@ -2,7 +2,7 @@ import * as lambda from '@aws-cdk/aws-lambda';
 import { Code, Runtime } from '@aws-cdk/aws-lambda';
 import { RestApi, LambdaIntegration } from '@aws-cdk/aws-apigateway';
 import * as path from 'path';
-import { App, BundlingDockerImage, Stack } from '@aws-cdk/core';
+import { App, BundlingDockerImage, Duration, Stack } from '@aws-cdk/core';
 
 
 const app = new App();
@@ -29,7 +29,8 @@ const ocrFn = new lambda.Function(stack, 'python3.6', {
     }),
     runtime: Runtime.PYTHON_3_6,
     layers: [al1Layer],
-    memorySize: 512,
+    memorySize: 1024,
+    timeout: Duration.seconds(10),
     handler: 'handler.main',
 });
 
