@@ -6,7 +6,7 @@ Example: AWS Lambda with Tesseract layer
 - Docker
 - Node.Js
 
-### Deploy
+### Deploy Stack
 
 ```bash
 ## install dependencies
@@ -25,3 +25,8 @@ curl -X POST \
   -d https://upload.wikimedia.org/wikipedia/de/e/eb/Goethe_Faust_Textbeispiel_Grossschreibung.png
 ```
 
+### Remove Stack
+
+```
+npx sls remove
+```

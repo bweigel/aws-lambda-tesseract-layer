@@ -1,5 +1,5 @@
 service: tesseract-ocr-example-py36
-frameworkVersion: ">=1.34.0 <2.0.0"
+frameworkVersion: ">=2.0.0"
 
 plugins:
     - serverless-python-requirements
