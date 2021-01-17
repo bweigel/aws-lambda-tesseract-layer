@@ -1,8 +1,8 @@
 Tesseract OCR Lambda Layer
 ===
 
-![Tesseract](https://img.shields.io/badge/Tesseract-4.1.0--rc4-green?style=flat-square)
-![Leptonica](https://img.shields.io/badge/Leptonica-1.78.0-green?style=flat-square)
+![Tesseract](https://img.shields.io/badge/Tesseract-4.1.1-green?style=flat-square)
+![Leptonica](https://img.shields.io/badge/Leptonica-1.80.0-green?style=flat-square)
 
 ![Continuos Integration](https://github.com/bweigel/aws-lambda-tesseract-layer/workflows/Continuos%20Integration/badge.svg)
 
