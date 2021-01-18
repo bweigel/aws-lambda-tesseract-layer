@@ -10,6 +10,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        amazonlinux: ['1', '2']
     defaults:
       run:
         working-directory: continous-integration
@@ -31,8 +34,6 @@ jobs:
     - name: NPM CI
       run: npm ci
     - name: CDK Synth
-      run: npx cdk synth
-    - name: Run integration test against Amazon Linux 1 (Lambda@Python 3.6)
-      run: npm run test:integration:al1
-    - name: Run integration test against Amazon Linux 2 (Lambda@Python 3.8)
-      run: npm run test:integration:al2
+      run: npx cdk synth --app "npx ts-node index-al${{ matrix.amazonlinux }}.ts"
+    - name: Run integration test against Amazon Linux ${{ matrix.amazonlinux }} (Lambda@Python 3.x)
+      run: npm run test:integration:al${{ matrix.amazonlinux }}
