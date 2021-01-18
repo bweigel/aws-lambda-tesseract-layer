@@ -1,58 +1,195 @@
 Tesseract OCR Lambda Layer
 ===
 
-![Tesseract](https://img.shields.io/badge/Tesseract-4.1.0--rc4-green?style=flat-square)
-![Leptonica](https://img.shields.io/badge/Leptonica-1.78.0-green?style=flat-square)
+![Tesseract](https://img.shields.io/badge/Tesseract-4.1.1-green?style=flat-square)
+![Leptonica](https://img.shields.io/badge/Leptonica-1.80.0-green?style=flat-square)
 
 ![Continuos Integration](https://github.com/bweigel/aws-lambda-tesseract-layer/workflows/Continuos%20Integration/badge.svg)
 
-### :sparkles: see also my [new repo](https://github.com/bweigel/aws-lambda-layers) for layer deployment via the AWS cloud development kit (CDK) :sparkles:
+> AWS Lambda layer containing the [tesseract OCR](https://github.com/tesseract-ocr/tesseract) libraries and command-line binary for Lambda Runtimes running on Amazon Linux 1 and 2.
 
-This projects creates an AWS lambda layer that contains the [tesseract 4.0.0](https://github.com/tesseract-ocr/tesseract) OCR libraries.
-The _fast_ german, english and osd (orientation and script detection) [data files](https://github.com/tesseract-ocr/tesseract/wiki/Data-Files) are included by default, but can be changed by editing the `Dockerfile`:
+<!-- TOC -->
 
-```Dockerfile
-...
-ARG DIST=/opt/build-dist
-# change OCR_LANG to enable the layer for different languages
-ARG OCR_LANG=deu
-# change TESSERACT_SUFFIX to use different datafiles (options: "_best", "_fast" and "")
-ARG TESSERACT_SUFFIX=_fast
-...
+- [Quickstart](#quickstart)
+- [Ready-to-use binaries](#ready-to-use-binaries)
+    - [Use with Serverless Framework](#use-with-serverless-framework)
+    - [Use with AWS CDK](#use-with-aws-cdk)
+- [Build tesseract layer from source using Docker](#build-tesseract-layer-from-source-using-docker)
+    - [available `Dockerfile`s](#available-dockerfiles)
+    - [Building a different tesseract version and/or language](#building-a-different-tesseract-version-andor-language)
+    - [Deployment size optimization](#deployment-size-optimization)
+    - [Building directly using CDK](#building-directly-using-cdk)
+    - [Layer contents](#layer-contents)
+- [Known Issues](#known-issues)
+    - [Avoiding Pillow library issues](#avoiding-pillow-library-issues)
+    - [Unable to import module 'handler': cannot import name '_imaging'](#unable-to-import-module-handler-cannot-import-name-_imaging)
+- [Contributors :heart:](#contributors-heart)
+
+<!-- /TOC -->
+
+# Quickstart
+
+This repo comes with ready-to-use binaries compiled against the AWS Lambda Runtimes (based on Amazonlinux 1).
+Example Projects in Python 3.6 using Serverless Framework and CDK are provided:
+
+```bash
+## Demo using Serverless Framework and prebuilt layer
+cd example/serverless-framework
+npm ci
+npx sls deploy
+
+## or ..
+
+## Demo using CDK and prebuilt layer
+cd example/cdk
+npm ci
+npx cdk deploy
 ```
-
-The library files that are content of the layer are stripped, before deployment to make them more suitable for the lambda environment.
-
-# Ready to use binaries
+# Ready-to-use binaries
 
 For ready to use binaries that you can put in your layer see [`ready-to-use`](./ready-to-use).
 
-# Building layers manually
+## Use with Serverless Framework
 
-## Build & Deploy layer
+> [Serverless Framework](https://www.serverless.com/framework/docs/getting-started/)
 
-```shell
-# Build Layer components
-./build.sh
-# Deploy via Serverless
-sls deploy
+Reference the path to the ready-to-use layer contents in your `serverless.yml`:
+
+```yaml
+service: tesseract-ocr-layer
+
+provider:
+  name: aws
+
+# define layer
+layers:
+  tesseractAl1:
+    # and path to contents
+    path: ready-to-use/amazonlinux-1
+    compatibleRuntimes:
+      - python3.6
+      - python3.7
+
+functions:
+  tesseract-ocr:
+    handler: ...
+    runtime: python3.6
+    # reference layer in function
+    layers:
+      - { Ref: TesseractAl1LambdaLayer }
+    events:
+      - http:
+          path: ocr
+          method: post
 ```
 
-## How to use
+Deploy
 
-There is an [example](./example) included for how to use this with the [Serverless Framework](https://serverless.com/). Follow instructions below.
+```
+npx sls deploy
+```
 
-## Avoiding Pillow library issues
-Use [cloud9 IDE](https://aws.amazon.com/cloud9/) with AMI linux to deploy [example](./example). Or alternately follow instructions for getting correct binaries for lambda using [EC2](https://forums.aws.amazon.com/thread.jspa?messageID=915630). AWS lambda uses AMI linux distro which needs correct python binaries. This step is not needed for deploying layer function. Layer function and example function are separately deployed.
+## Use with AWS CDK
 
-## Misc: Layer contents
+> [AWS CDK](https://github.com/aws/aws-cdk#getting-started)
+
+Reference the path to the layer contents in your constructs:
+
+```typescript
+const app = new App();
+const stack = new Stack(app, 'tesseract-lambda-ci');
+
+const al1Layer = new lambda.LayerVersion(stack, 'al1-layer', {
+    // reference the directory containing the ready-to-use layer
+    code: Code.fromAsset(path.resolve(__dirname, './ready-to-use/amazonlinux-1')),
+    description: 'AL1 Tesseract Layer',
+});
+new lambda.Function(stack, 'python3.6', {
+    // reference the source code to your function
+    code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda-handlers')),
+    runtime: Runtime.PYTHON_3_6,
+    // add tesseract layer to function
+    layers: [al1Layer],
+    memorySize: 512,
+    timeout: Duration.seconds(30),
+    handler: 'handler.main',
+});
+```
+
+# Build tesseract layer from source using Docker
+
+You can build layer contents manually with the [provided `Dockerfile`s](#available-dockerfiles).
+
+Build layer using your preferred `Dockerfile`:
+
+```bash
+## build
+docker build -t tesseract-lambda-layer -f Dockerfile .
+## run container
+export CONTAINER=$(docker run -d tesseract-lambda-layer false)
+## copy tesseract files from container to local folder layer
+docker cp $CONTAINER:/opt/build-dist layer
+## remove Docker container
+docker rm $CONTAINER
+unset CONTAINER
+```
+
+## available `Dockerfile`s
+
+| Dockerfile       | Base-Image     | compatible Runtimes                                                   |
+|:-----------------|:---------------|:----------------------------------------------------------------------|
+| `Dockerfile`     | Amazon Linux 1 | Python 2.7/3.6/3.7, Ruby 2.5, Java 8 (OpenJDK), Go 1.x, .NET Core 2.1 |
+| `Dockerfile.al2` | Amazon Linux 2 | Python 3.8, Ruby 2.7, Java 8/11 (Coretto), .NET Core 3.1              |
+
+
+## Building a different tesseract version and/or language
+
+Per default the build generated the [tesseract 4.1.1](https://github.com/tesseract-ocr/tesseract/releases/tag/4.1.1) OCR libraries with the _fast_ german, english and osd (orientation and script detection) [data files](https://github.com/tesseract-ocr/tesseract/wiki/Data-Files) included.
+
+The build process can be modified using different build time arguments (defined as `ARG` in `Dockerfile`), using the `--build-arg` option of `docker build`.
+
+| Build-Argument           | description                                                                                                       | available versions                                                                                                                        |
+|:-------------------------|:------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------|
+| `TESSERACT_VERSION`      | the tesseract OCR engine                                                                                          | https://github.com/tesseract-ocr/tesseract/releases                                                                                       |
+| `LEPTONICA_VERSION`      | fundamental image processing and analysis library                                                                 | https://github.com/danbloomberg/leptonica/releases                                                                                        |
+| `OCR_LANG`               | Language to install (in addition to `eng` and `osd`)                                                              | https://github.com/tesseract-ocr/tessdata (`<lang>.traineddata`)                                                                          |
+| `TESSERACT_DATA_SUFFIX`  | Trained LSTM models for tesseract. Can be empty (default), `_best` (best inference) and `_fast` (fast inference). | https://github.com/tesseract-ocr/tessdata, https://github.com/tesseract-ocr/tessdata_best, https://github.com/tesseract-ocr/tessdata_fast |
+| `TESSERACT_DATA_VERSION` | Version of the trained LSTM models for tesseract. (currently - in January 2021 - only `4.0.0` is available)       | https://github.com/tesseract-ocr/tessdata/releases/tag/4.0.0                                                                              |
+
+
+**Example of custom build**
+
+```bash
+## Build a Dockerimage based on Amazon Linux 1, with Tesseract 4.0.0
+docker build --build-arg TESSERACT_VERSION=4.0.0 -t tesseract-lambda-layer -f Dockerfile .
+```
+
+## Deployment size optimization
+
+The library files that are content of the layer are stripped, before deployment to make them more suitable for the lambda environment. See `Dockerfile`s:
+
+```Dockerfile
+RUN ... \
+  find ${DIST}/lib -name '*.so*' | xargs strip -s
+```
+
+The stripping can cause issues, when the build runtime and the lambda runtime are different (e.g. if building on Amazon Linux 1 and running on Amazon Linux 2).
+
+## Building directly using CDK
+
+You can build the layer directly, when using AWS CDK, using the [`bundling` option](https://aws.amazon.com/blogs/devops/building-apps-with-aws-cdk/).
+See [`continous-integration/index.ts`](continous-integration/index.ts) and the [corresponding Github Workflow](https://github.com/bweigel/aws-lambda-tesseract-layer/actions?query=workflow%3A%22Continuos+Integration%22) for an example.
+
+## Layer contents
 
 The layer contents get deployed to `/opt`, when used by a function. See [here](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html) for details.
 See [ready-to-use](./ready-to-use/) for layer contents for Amazon Linux 1 and Amazon Linux 2 (TODO).
 
-## Known Issues
+# Known Issues
+## Avoiding Pillow library issues
+Use [cloud9 IDE](https://aws.amazon.com/cloud9/) with AMI linux to deploy [example](./example). Or alternately follow instructions for getting correct binaries for lambda using [EC2](https://forums.aws.amazon.com/thread.jspa?messageID=915630). AWS lambda uses AMI linux distro which needs correct python binaries. This step is not needed for deploying layer function. Layer function and example function are separately deployed.
 
-### Unable to import module 'handler': cannot import name '_imaging'
+## Unable to import module 'handler': cannot import name '_imaging'
 
 You might run into an issue like this:
 
@@ -84,6 +221,6 @@ or, as @secretshardul suggested
 >simple solution: Use AWS cloud9 to deploy example folder. Layer can be deployed from anywhere.
 >complex solution: Deploy EC2 instance with AMI linux and get correct binaries.
 
-## Contributors :heart:
+# Contributors :heart:
 
 - @secretshardul

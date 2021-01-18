@@ -1,5 +1,5 @@
 {
-  "name": "cdk-tesseract-layer-test",
+  "name": "aws-lambda-tesseract-layer-example",
   "version": "0.0.0",
   "description": "",
   "main": "dist/index.js",
@@ -17,11 +17,7 @@
     "url": "https://github.com/bweigel/aws-lambda-tesseract-layer.git"
   },
   "scripts": {
-    "synth": "npx cdk synth",
-    "test:integration:al1": "sam local invoke -t cdk.out/tesseract-lambda-test.template.json al1-py36 --no-event > al1-test-output.txt && cat al1-test-output.txt | grep -Eiv \"(fail|error|exception)\"",
-    "test:integration:al2": "sam local invoke -t cdk.out/tesseract-lambda-test.template.json al2-py38 --no-event > al2-test-output.txt && cat al2-test-output.txt | grep -Eiv \"(fail|error|exception)\"",
-    "bundle:binary:al1": "cp -r cdk.out/$(cat cdk.out/tesseract-lambda-test.template.json | jq -r '.Resources.al1layer.Metadata.\"aws:asset:path\"')/. ../ready-to-use/amazonlinux-1",
-    "bundle:binary:al2": "cp -r cdk.out/$(cat cdk.out/tesseract-lambda-test.template.json | jq -r '.Resources.al2layer.Metadata.\"aws:asset:path\"')/. ../ready-to-use/amazonlinux-2"
+    "synth": "npx cdk synth"
   },
   "jest": {
     "transform": {
@@ -37,6 +33,7 @@
   "devDependencies": {
     "@aws-cdk/assert": "^1.72.0",
     "@aws-cdk/aws-lambda": "^1.72.0",
+    "@aws-cdk/aws-apigateway": "^1.72.0",
     "@aws-cdk/core": "^1.72.0",
     "@types/jest": "^26.0.14",
     "@types/node": "^14.11.5",

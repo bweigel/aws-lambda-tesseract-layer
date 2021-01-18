@@ -5,7 +5,7 @@ import { App, BundlingDockerImage, Duration, Stack } from '@aws-cdk/core';
 
 
 const app = new App();
-const stack = new Stack(app, 'tesseract-lambda-test');
+const stack = new Stack(app, 'tesseract-lambda-ci');
 
 /**
  * Test setup and artifacts for AL 1

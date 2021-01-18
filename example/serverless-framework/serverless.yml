@@ -1,0 +1,33 @@
+service: tesseract-ocr-example-py36
+frameworkVersion: ">=2.0.0"
+
+plugins:
+    - serverless-python-requirements
+
+provider:
+  name: aws
+  region: eu-central-1
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+    dockerFile: Dockerfile
+
+layers:
+  tesseractAl1:
+    # specify path to layer content
+    path: ../../ready-to-use/amazonlinux-1
+    compatibleRuntimes:
+      - python3.6
+      - python3.7
+
+functions:
+  tesseract-ocr:
+    handler: handler.main
+    runtime: python3.6
+    layers:
+      - { Ref: TesseractAl1LambdaLayer }
+    events:
+      - http:
+          path: ocr
+          method: post
