@@ -9,6 +9,7 @@ on:
 
 jobs:
   test:
+    name: Amazon Linux ${{ matrix.amazonlinux }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
