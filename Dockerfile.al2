@@ -1,3 +1,4 @@
+## Builds binaries for Amazonlinux 2
 FROM lambci/lambda-base-2:build
 
 ARG LEPTONICA_VERSION=1.80.0
