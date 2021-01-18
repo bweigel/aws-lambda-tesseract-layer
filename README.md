@@ -49,6 +49,8 @@ npx cdk deploy
 
 For ready to use binaries that you can put in your layer see [`ready-to-use`](./ready-to-use).
 
+See [examples](./example) for some ready-to-use examples.
+
 ## Use with Serverless Framework
 
 > [Serverless Framework](https://www.serverless.com/framework/docs/getting-started/)
