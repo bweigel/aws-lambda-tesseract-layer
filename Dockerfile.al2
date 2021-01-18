@@ -1,4 +1,5 @@
-FROM lambci/lambda-base:build
+## Builds binaries for Amazonlinux 2
+FROM lambci/lambda-base-2:build
 
 ARG LEPTONICA_VERSION=1.80.0
 ARG TESSERACT_VERSION=4.1.1
