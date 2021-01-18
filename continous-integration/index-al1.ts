@@ -13,7 +13,7 @@ const pathToLayerSource = path.resolve(__dirname, '..');
 const al1Layer = new lambda.LayerVersion(stack, 'al1-layer', {
     code: Code.fromAsset(pathToLayerSource, {
     bundling: {
-        image: BundlingDockerImage.fromAsset(pathToLayerSource),
+        image: BundlingDockerImage.fromAsset(pathToLayerSource, { file: '../Dockerfile.al1' }),
         command: ['/bin/bash', '-c', 'cp -r /opt/build-dist/. /asset-output/'],
     },
     }),

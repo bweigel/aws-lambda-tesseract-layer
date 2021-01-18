@@ -124,7 +124,7 @@ Build layer using your preferred `Dockerfile`:
 
 ```bash
 ## build
-docker build -t tesseract-lambda-layer -f Dockerfile .
+docker build -t tesseract-lambda-layer -f [Dockerfile.al1|Dockerfile.al2] .
 ## run container
 export CONTAINER=$(docker run -d tesseract-lambda-layer false)
 ## copy tesseract files from container to local folder layer
@@ -138,7 +138,7 @@ unset CONTAINER
 
 | Dockerfile       | Base-Image     | compatible Runtimes                                                   |
 |:-----------------|:---------------|:----------------------------------------------------------------------|
-| `Dockerfile`     | Amazon Linux 1 | Python 2.7/3.6/3.7, Ruby 2.5, Java 8 (OpenJDK), Go 1.x, .NET Core 2.1 |
+| `Dockerfile.al1` | Amazon Linux 1 | Python 2.7/3.6/3.7, Ruby 2.5, Java 8 (OpenJDK), Go 1.x, .NET Core 2.1 |
 | `Dockerfile.al2` | Amazon Linux 2 | Python 3.8, Ruby 2.7, Java 8/11 (Coretto), .NET Core 3.1              |
 
 
@@ -146,7 +146,7 @@ unset CONTAINER
 
 Per default the build generated the [tesseract 4.1.1](https://github.com/tesseract-ocr/tesseract/releases/tag/4.1.1) OCR libraries with the _fast_ german, english and osd (orientation and script detection) [data files](https://github.com/tesseract-ocr/tesseract/wiki/Data-Files) included.
 
-The build process can be modified using different build time arguments (defined as `ARG` in `Dockerfile`), using the `--build-arg` option of `docker build`.
+The build process can be modified using different build time arguments (defined as `ARG` in `Dockerfile.al[1|2]`), using the `--build-arg` option of `docker build`.
 
 | Build-Argument           | description                                                                                                       | available versions                                                                                                                        |
 |:-------------------------|:------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------|
@@ -161,7 +161,7 @@ The build process can be modified using different build time arguments (defined 
 
 ```bash
 ## Build a Dockerimage based on Amazon Linux 1, with Tesseract 4.0.0
-docker build --build-arg TESSERACT_VERSION=4.0.0 -t tesseract-lambda-layer -f Dockerfile .
+docker build --build-arg TESSERACT_VERSION=4.0.0 -t tesseract-lambda-layer -f Dockerfile.al1 .
 ```
 
 ## Deployment size optimization
