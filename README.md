@@ -4,6 +4,10 @@ Tesseract OCR Lambda Layer
 ![Tesseract](https://img.shields.io/badge/Tesseract-4.1.1-green?style=flat-square)
 ![Leptonica](https://img.shields.io/badge/Leptonica-1.80.0-green?style=flat-square)
 
+![Examples available for Runtimes](https://img.shields.io/badge/Examples_(Lambda_runtimes)-Python_3.6(AL1)-informational?style=flat-square)
+![Examples available for IaC Tools](https://img.shields.io/badge/Examples_(IaC)-Serverless_Framework,_AWS_CDK-informational?style=flat-square)
+
+
 ![Continuos Integration](https://github.com/bweigel/aws-lambda-tesseract-layer/workflows/Continuos%20Integration/badge.svg)
 
 > AWS Lambda layer containing the [tesseract OCR](https://github.com/tesseract-ocr/tesseract) libraries and command-line binary for Lambda Runtimes running on Amazon Linux 1 and 2.
