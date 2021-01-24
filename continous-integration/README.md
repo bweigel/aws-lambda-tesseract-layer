@@ -12,7 +12,7 @@ The result is checked for errors.
 
 Commands to reproduce:
 
-```
+```bash
 npm ci
 npx cdk synth
 ## run integration test using AL1 & Python 3.6
