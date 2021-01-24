@@ -230,3 +230,4 @@ or, as @secretshardul suggested
 # Contributors :heart:
 
 - @secretshardul
+- @TheLucasMoore for providing a Dockerfile that builds working binaries for Python 3.8 / Amazon Linux 2
