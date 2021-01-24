@@ -11,10 +11,8 @@ Example: AWS Lambda with Tesseract layer (Amazon Linux 1 based runtime - Python 
 ```bash
 ## install dependencies
 npm ci
-## if you haven't already, you need to bootstrap your account to work with cdk
-npx cdk bootstrap
 ## deploy
-npx cdk deploy
+npx sls deploy
 ```
 
 ![Deployment](./deployment.png)
@@ -30,5 +28,5 @@ curl -X POST \
 ### Remove Stack
 
 ```
-npx cdk destroy
+npx sls remove
 ```
