@@ -11,7 +11,7 @@ const stack = new Stack(app, 'tesseract-ocr-example-cdk-py38');
 /**
  * Artifacts for AL 2
  */
-const al1Layer = new lambda.LayerVersion(stack, 'al1-layer', {
+const al2Layer = new lambda.LayerVersion(stack, 'al2-layer', {
     code: Code.fromAsset(path.resolve(__dirname, '../../ready-to-use/amazonlinux-2')),
     description: 'AL2 Tesseract Layer',
 });
@@ -28,7 +28,7 @@ const ocrFn = new lambda.Function(stack, 'python3.8', {
         }
     }),
     runtime: Runtime.PYTHON_3_8,
-    layers: [al1Layer],
+    layers: [al2Layer],
     memorySize: 1024,
     timeout: Duration.seconds(10),
     handler: 'handler.main',
