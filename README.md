@@ -33,12 +33,12 @@ Tesseract OCR Lambda Layer
 
 # Quickstart
 
-This repo comes with ready-to-use binaries compiled against the AWS Lambda Runtimes (based on Amazonlinux 1).
-Example Projects in Python 3.6 using Serverless Framework and CDK are provided:
+This repo comes with ready-to-use binaries compiled against the AWS Lambda Runtimes (based on Amazon Linux 1 and 2).
+Example Projects in Python 3.6 (& 3.8) using Serverless Framework and CDK are provided:
 
 ```bash
 ## Demo using Serverless Framework and prebuilt layer
-cd example/serverless-framework
+cd example/serverless
 npm ci
 npx sls deploy
 
@@ -69,20 +69,19 @@ provider:
 
 # define layer
 layers:
-  tesseractAl1:
+  tesseractAl2:
     # and path to contents
-    path: ready-to-use/amazonlinux-1
+    path: ready-to-use/amazonlinux-2
     compatibleRuntimes:
-      - python3.6
-      - python3.7
+      - python3.8
 
 functions:
   tesseract-ocr:
     handler: ...
-    runtime: python3.6
+    runtime: python3.8
     # reference layer in function
     layers:
-      - { Ref: TesseractAl1LambdaLayer }
+      - { Ref: TesseractAl2LambdaLayer }
     events:
       - http:
           path: ocr
@@ -105,17 +104,17 @@ Reference the path to the layer contents in your constructs:
 const app = new App();
 const stack = new Stack(app, 'tesseract-lambda-ci');
 
-const al1Layer = new lambda.LayerVersion(stack, 'al1-layer', {
+const al2Layer = new lambda.LayerVersion(stack, 'al2-layer', {
     // reference the directory containing the ready-to-use layer
-    code: Code.fromAsset(path.resolve(__dirname, './ready-to-use/amazonlinux-1')),
+    code: Code.fromAsset(path.resolve(__dirname, './ready-to-use/amazonlinux-2')),
     description: 'AL1 Tesseract Layer',
 });
-new lambda.Function(stack, 'python3.6', {
+new lambda.Function(stack, 'python38', {
     // reference the source code to your function
     code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda-handlers')),
-    runtime: Runtime.PYTHON_3_6,
+    runtime: Runtime.PYTHON_3_8,
     // add tesseract layer to function
-    layers: [al1Layer],
+    layers: [al2Layer],
     memorySize: 512,
     timeout: Duration.seconds(30),
     handler: 'handler.main',
