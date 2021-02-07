@@ -87,7 +87,7 @@ const al2tess5Layer = new lambda.LayerVersion(stack, 'al2tess5-layer', {
     description: 'AL2 Tesseract 5 Layer',
 });
 stack.renameLogicalId(stack.getLogicalId(al2tess5Layer.node.defaultChild as CfnLayerVersion), 'al2tess5layer')
-new lambda.Function(stack, 'python3.8', {
+new lambda.Function(stack, 'python3.8-tess5', {
     code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda-handlers'),
     {
         bundling: {
