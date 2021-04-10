@@ -1,4 +1,4 @@
-Example: AWS Lambda with Tesseract layer (Amazon Linux 1 based runtime - Python 3.6)
+Example: AWS Lambda with Tesseract layer (Amazon Linux 2 based runtime - Python 3.8)
 ===
 
 ### Requirements

@@ -35,26 +35,3 @@ jobs:
       run: npx cdk synth --app "npx ts-node index-al${{ matrix.amazonlinux }}.ts"
     - name: Run integration test against Amazon Linux ${{ matrix.amazonlinux }} (Lambda@Python 3.x)
       run: npm run test:integration:al${{ matrix.amazonlinux }}
-  tesseract5:
-    name: Amazon Linux 2 - Tesseract 5
-    runs-on: ubuntu-latest
-      run:
-        working-directory: continous-integration
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js 12.x
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12.x
-    - name: Setup Python
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.8
-    - name: Install AWS SAM CLI
-      run:  pip install aws-sam-cli
-    - name: NPM CI
-      run: npm ci
-    - name: CDK Synth
-      run: npx cdk synth --app "npx ts-node index-al2-tesseract-5.ts"
-    - name: Run integration test against Amazon Linux 2 (Lambda@Python 3.x)
-      run: npm run test:integration:al2:tesseract5

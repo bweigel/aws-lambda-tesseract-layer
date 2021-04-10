@@ -1,10 +1,10 @@
 Tesseract OCR Lambda Layer
 ===
 
-![Tesseract](https://img.shields.io/badge/Tesseract-4.1.1-green?style=flat-square)
+![Tesseract](https://img.shields.io/badge/Tesseract-5.0.0--alpha--20201231-green?style=flat-square)
 ![Leptonica](https://img.shields.io/badge/Leptonica-1.80.0-green?style=flat-square)
 
-![Examples available for Runtimes](https://img.shields.io/badge/Examples_(Lambda_runtimes)-Python_3.6(AL1),Python_3.8(AL2)-informational?style=flat-square)
+![Examples available for Runtimes](https://img.shields.io/badge/Examples_(Lambda_runtimes)-Python_3.8(AL2)-informational?style=flat-square)
 ![Examples available for IaC Tools](https://img.shields.io/badge/Examples_(IaC)-Serverless_Framework,_AWS_CDK-informational?style=flat-square)
 
 
@@ -33,8 +33,8 @@ Tesseract OCR Lambda Layer
 
 # Quickstart
 
-This repo comes with ready-to-use binaries compiled against the AWS Lambda Runtimes (based on Amazon Linux 1 and 2).
-Example Projects in Python 3.6 (& 3.8) using Serverless Framework and CDK are provided:
+This repo comes with ready-to-use binaries compiled against the AWS Lambda Runtimes (based on Amazon Linux 2).
+Example Projects in Python 3.8 using Serverless Framework and CDK are provided:
 
 ```bash
 ## Demo using Serverless Framework and prebuilt layer
@@ -129,7 +129,7 @@ Build layer using your preferred `Dockerfile`:
 
 ```bash
 ## build
-docker build -t tesseract-lambda-layer -f [Dockerfile.al1|Dockerfile.al2] .
+docker build -t tesseract-lambda-layer -f [Dockerfile] .
 ## run container
 export CONTAINER=$(docker run -d tesseract-lambda-layer false)
 ## copy tesseract files from container to local folder layer
@@ -143,15 +143,14 @@ unset CONTAINER
 
 | Dockerfile       | Base-Image     | compatible Runtimes                                                   |
 |:-----------------|:---------------|:----------------------------------------------------------------------|
-| `Dockerfile.al1` | Amazon Linux 1 | Python 2.7/3.6/3.7, Ruby 2.5, Java 8 (OpenJDK), Go 1.x, .NET Core 2.1 |
-| `Dockerfile.al2` | Amazon Linux 2 | Python 3.8, Ruby 2.7, Java 8/11 (Coretto), .NET Core 3.1              |
+| `Dockerfile` | Amazon Linux 2 | Python 3.8, Ruby 2.7, Java 8/11 (Coretto), .NET Core 3.1              |
 
 
 ## Building a different tesseract version and/or language
 
-Per default the build generated the [tesseract 4.1.1](https://github.com/tesseract-ocr/tesseract/releases/tag/4.1.1) OCR libraries with the _fast_ german, english and osd (orientation and script detection) [data files](https://github.com/tesseract-ocr/tesseract/wiki/Data-Files) included.
+Per default the build generated the [tesseract 5.0.0-alpha-20210401](https://github.com/tesseract-ocr/tesseract/releases/tag/5.0.0-alpha-20201231) OCR libraries with the _fast_ german, english and osd (orientation and script detection) [data files](https://github.com/tesseract-ocr/tesseract/wiki/Data-Files) included.
 
-The build process can be modified using different build time arguments (defined as `ARG` in `Dockerfile.al[1|2]`), using the `--build-arg` option of `docker build`.
+The build process can be modified using different build time arguments (defined as `ARG` in `Dockerfile`), using the `--build-arg` option of `docker build`.
 
 | Build-Argument           | description                                                                                                       | available versions                                                                                                                        |
 |:-------------------------|:------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------|
@@ -165,8 +164,8 @@ The build process can be modified using different build time arguments (defined 
 **Example of custom build**
 
 ```bash
-## Build a Dockerimage based on Amazon Linux 1, with Tesseract 4.0.0
-docker build --build-arg TESSERACT_VERSION=4.0.0 -t tesseract-lambda-layer -f Dockerfile.al1 .
+## Build a Dockerimage with Tesseract 4.0.0
+docker build --build-arg TESSERACT_VERSION=4.0.0 -t tesseract-lambda-layer -f Dockerfile .
 ```
 
 ## Deployment size optimization
@@ -188,7 +187,7 @@ See [`continous-integration/index.ts`](continous-integration/index.ts) and the [
 ## Layer contents
 
 The layer contents get deployed to `/opt`, when used by a function. See [here](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html) for details.
-See [ready-to-use](./ready-to-use/) for layer contents for Amazon Linux 1 and Amazon Linux 2 (TODO).
+See [ready-to-use](./ready-to-use/) for layer contents for Amazon Linux 2.
 
 # Known Issues
 ## Avoiding Pillow library issues
