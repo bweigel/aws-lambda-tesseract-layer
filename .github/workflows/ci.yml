@@ -4,7 +4,7 @@ on:
     paths:
       - 'Dockerfile*'
     branches:
-      - master
+      - tesseract-5
   pull_request: {}
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        amazonlinux: ['1', '2']
+        amazonlinux: ['2']
     defaults:
       run:
         working-directory: continous-integration
@@ -32,6 +32,6 @@ jobs:
     - name: NPM CI
       run: npm ci
     - name: CDK Synth
-      run: npx cdk synth --app "npx ts-node index-al${{ matrix.amazonlinux }}.ts"
+      run: npx cdk synth --app "npx ts-node index-all.ts"
     - name: Run integration test against Amazon Linux ${{ matrix.amazonlinux }} (Lambda@Python 3.x)
-      run: npm run test:integration:al${{ matrix.amazonlinux }}
+      run: npm run test:integration
