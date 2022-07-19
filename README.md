@@ -1,7 +1,7 @@
 Tesseract OCR Lambda Layer
 ===
 
-![Tesseract](https://img.shields.io/badge/Tesseract-4.1.3-green?style=flat-square)
+![Tesseract](https://img.shields.io/badge/Tesseract-5.2.0-green?style=flat-square)
 ![Leptonica](https://img.shields.io/badge/Leptonica-1.82.0-green?style=flat-square)
 
 ![Examples available for Runtimes](https://img.shields.io/badge/Examples_(Lambda_runtimes)-Python_3.6(AL1),Python_3.8(AL2)-informational?style=flat-square)
@@ -14,19 +14,20 @@ Tesseract OCR Lambda Layer
 
 <!-- TOC -->
 
+- [Tesseract OCR Lambda Layer](#tesseract-ocr-lambda-layer)
 - [Quickstart](#quickstart)
 - [Ready-to-use binaries](#ready-to-use-binaries)
-    - [Use with Serverless Framework](#use-with-serverless-framework)
-    - [Use with AWS CDK](#use-with-aws-cdk)
+  - [Use with Serverless Framework](#use-with-serverless-framework)
+  - [Use with AWS CDK](#use-with-aws-cdk)
 - [Build tesseract layer from source using Docker](#build-tesseract-layer-from-source-using-docker)
-    - [available `Dockerfile`s](#available-dockerfiles)
-    - [Building a different tesseract version and/or language](#building-a-different-tesseract-version-andor-language)
-    - [Deployment size optimization](#deployment-size-optimization)
+  - [available `Dockerfile`s](#available-dockerfiles)
+  - [Building a different tesseract version and/or language](#building-a-different-tesseract-version-andor-language)
+  - [Deployment size optimization](#deployment-size-optimization)
   - [Building the layer binaries directly using CDK](#building-the-layer-binaries-directly-using-cdk)
-    - [Layer contents](#layer-contents)
+  - [Layer contents](#layer-contents)
 - [Known Issues](#known-issues)
-    - [Avoiding Pillow library issues](#avoiding-pillow-library-issues)
-    - [Unable to import module 'handler': cannot import name '_imaging'](#unable-to-import-module-handler-cannot-import-name-_imaging)
+  - [Avoiding Pillow library issues](#avoiding-pillow-library-issues)
+  - [Unable to import module 'handler': cannot import name '_imaging'](#unable-to-import-module-handler-cannot-import-name-_imaging)
 - [Contributors :heart:](#contributors-heart)
 
 <!-- /TOC -->
@@ -149,7 +150,7 @@ unset CONTAINER
 
 ## Building a different tesseract version and/or language
 
-Per default the build generated the [tesseract 4.1.3](https://github.com/tesseract-ocr/tesseract/releases/tag/4.1.3) OCR libraries with the _fast_ german, english and osd (orientation and script detection) [data files](https://github.com/tesseract-ocr/tesseract/wiki/Data-Files) included.
+Per default the build generates the [tesseract 4.1.3](https://github.com/tesseract-ocr/tesseract/releases/tag/4.1.3) (amazonlinux-1) or [5.2.0](https://github.com/tesseract-ocr/tesseract/releases/tag/5.2.0) (amazonlinux-2) OCR libraries with the _fast_ german, english and osd (orientation and script detection) [data files](https://github.com/tesseract-ocr/tesseract/wiki/Data-Files) included.
 
 The build process can be modified using different build time arguments (defined as `ARG` in `Dockerfile.al[1|2]`), using the `--build-arg` option of `docker build`.
 
