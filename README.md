@@ -22,7 +22,7 @@ Tesseract OCR Lambda Layer
     - [available `Dockerfile`s](#available-dockerfiles)
     - [Building a different tesseract version and/or language](#building-a-different-tesseract-version-andor-language)
     - [Deployment size optimization](#deployment-size-optimization)
-    - [Building directly using CDK](#building-directly-using-cdk)
+  - [Building the layer binaries directly using CDK](#building-the-layer-binaries-directly-using-cdk)
     - [Layer contents](#layer-contents)
 - [Known Issues](#known-issues)
     - [Avoiding Pillow library issues](#avoiding-pillow-library-issues)
@@ -182,10 +182,11 @@ RUN ... \
 
 The stripping can cause issues, when the build runtime and the lambda runtime are different (e.g. if building on Amazon Linux 1 and running on Amazon Linux 2).
 
-## Building directly using CDK
+## Building the layer binaries directly using CDK
 
-You can build the layer directly, when using AWS CDK, using the [`bundling` option](https://aws.amazon.com/blogs/devops/building-apps-with-aws-cdk/).
-See [`continous-integration/index.ts`](continous-integration/index.ts) and the [corresponding Github Workflow](https://github.com/bweigel/aws-lambda-tesseract-layer/actions?query=workflow%3A%22Continuos+Integration%22) for an example.
+You can build the layer directly and get the artifacts (like in [ready-to-use](./ready-to-use/)). This is done using AWS CDK with the [`bundling` option](https://aws.amazon.com/blogs/devops/building-apps-with-aws-cdk/).
+
+Refer to [continous-integration](./continous-integration/README.md) and the [corresponding Github Workflow](https://github.com/bweigel/aws-lambda-tesseract-layer/actions?query=workflow%3A%22Continuos+Integration%22) for an example.
 
 ## Layer contents
 
