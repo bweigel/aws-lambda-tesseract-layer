@@ -166,7 +166,9 @@ The build process can be modified using different build time arguments (defined 
 
 ```bash
 ## Build a Dockerimage based on Amazon Linux 1, with Tesseract 4.0.0
-docker build --build-arg TESSERACT_VERSION=4.0.0 -t tesseract-lambda-layer -f Dockerfile.al1 .
+docker build --build-arg TESSERACT_VERSION=4.0.0 --build-arg OCR_LANG=fra -t tesseract-lambda-layer -f Dockerfile.al1 .
+## Build a Dockerimage based on Amazon Linux 2, with French language support
+docker build --build-arg OCR_LANG=fra -t tesseract-lambda-layer-french -f Dockerfile.al2 .
 ```
 
 ## Deployment size optimization
