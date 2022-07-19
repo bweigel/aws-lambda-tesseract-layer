@@ -14,11 +14,11 @@ Commands to reproduce:
 
 ```bash
 npm ci
-npx cdk synth
+npx cdk --app 'npx ts-node index-al[1|2].ts' synth
 ## run integration test using AL1 & Python 3.6
-npm npm run test:integration:al1
+npx npm run test:integration:al1
 ## run integration test using AL2 & Python 3.8
-npm npm run test:integration:al2
+npx npm run test:integration:al2
 ```
 
 ## Bundling
