@@ -1,8 +1,8 @@
 ## Builds binaries for Amazonlinux 1
 FROM lambci/lambda-base:build
 
-ARG LEPTONICA_VERSION=1.80.0
-ARG TESSERACT_VERSION=4.1.1
+ARG LEPTONICA_VERSION=1.82.0
+ARG TESSERACT_VERSION=4.1.3
 ARG AUTOCONF_ARCHIVE_VERSION=2017.09.28
 ARG TMP_BUILD=/tmp
 ARG TESSERACT=/opt/tesseract
@@ -12,7 +12,7 @@ ARG DIST=/opt/build-dist
 ARG OCR_LANG=deu
 # change TESSERACT_DATA_SUFFIX to use different datafiles (options: "_best", "_fast" and "")
 ARG TESSERACT_DATA_SUFFIX=_fast
-ARG TESSERACT_DATA_VERSION=4.0.0
+ARG TESSERACT_DATA_VERSION=4.1.0
 
 RUN yum makecache fast; yum clean all && yum -y update && yum -y upgrade; yum clean all && \
     yum install -y yum-plugin-ovl; yum clean all && yum -y groupinstall "Development Tools"; yum clean all

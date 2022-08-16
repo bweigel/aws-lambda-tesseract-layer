@@ -1,8 +1,8 @@
 Tesseract OCR Lambda Layer
 ===
 
-![Tesseract](https://img.shields.io/badge/Tesseract-4.1.1-green?style=flat-square)
-![Leptonica](https://img.shields.io/badge/Leptonica-1.80.0-green?style=flat-square)
+![Tesseract](https://img.shields.io/badge/Tesseract-5.2.0-green?style=flat-square)
+![Leptonica](https://img.shields.io/badge/Leptonica-1.82.0-green?style=flat-square)
 
 ![Examples available for Runtimes](https://img.shields.io/badge/Examples_(Lambda_runtimes)-Python_3.6(AL1),Python_3.8(AL2)-informational?style=flat-square)
 ![Examples available for IaC Tools](https://img.shields.io/badge/Examples_(IaC)-Serverless_Framework,_AWS_CDK-informational?style=flat-square)
@@ -14,19 +14,20 @@ Tesseract OCR Lambda Layer
 
 <!-- TOC -->
 
+- [Tesseract OCR Lambda Layer](#tesseract-ocr-lambda-layer)
 - [Quickstart](#quickstart)
 - [Ready-to-use binaries](#ready-to-use-binaries)
-    - [Use with Serverless Framework](#use-with-serverless-framework)
-    - [Use with AWS CDK](#use-with-aws-cdk)
+  - [Use with Serverless Framework](#use-with-serverless-framework)
+  - [Use with AWS CDK](#use-with-aws-cdk)
 - [Build tesseract layer from source using Docker](#build-tesseract-layer-from-source-using-docker)
-    - [available `Dockerfile`s](#available-dockerfiles)
-    - [Building a different tesseract version and/or language](#building-a-different-tesseract-version-andor-language)
-    - [Deployment size optimization](#deployment-size-optimization)
-    - [Building directly using CDK](#building-directly-using-cdk)
-    - [Layer contents](#layer-contents)
+  - [available `Dockerfile`s](#available-dockerfiles)
+  - [Building a different tesseract version and/or language](#building-a-different-tesseract-version-andor-language)
+  - [Deployment size optimization](#deployment-size-optimization)
+  - [Building the layer binaries directly using CDK](#building-the-layer-binaries-directly-using-cdk)
+  - [Layer contents](#layer-contents)
 - [Known Issues](#known-issues)
-    - [Avoiding Pillow library issues](#avoiding-pillow-library-issues)
-    - [Unable to import module 'handler': cannot import name '_imaging'](#unable-to-import-module-handler-cannot-import-name-_imaging)
+  - [Avoiding Pillow library issues](#avoiding-pillow-library-issues)
+  - [Unable to import module 'handler': cannot import name '_imaging'](#unable-to-import-module-handler-cannot-import-name-_imaging)
 - [Contributors :heart:](#contributors-heart)
 
 <!-- /TOC -->
@@ -149,7 +150,7 @@ unset CONTAINER
 
 ## Building a different tesseract version and/or language
 
-Per default the build generated the [tesseract 4.1.1](https://github.com/tesseract-ocr/tesseract/releases/tag/4.1.1) OCR libraries with the _fast_ german, english and osd (orientation and script detection) [data files](https://github.com/tesseract-ocr/tesseract/wiki/Data-Files) included.
+Per default the build generates the [tesseract 4.1.3](https://github.com/tesseract-ocr/tesseract/releases/tag/4.1.3) (amazonlinux-1) or [5.2.0](https://github.com/tesseract-ocr/tesseract/releases/tag/5.2.0) (amazonlinux-2) OCR libraries with the _fast_ german, english and osd (orientation and script detection) [data files](https://github.com/tesseract-ocr/tesseract/wiki/Data-Files) included.
 
 The build process can be modified using different build time arguments (defined as `ARG` in `Dockerfile.al[1|2]`), using the `--build-arg` option of `docker build`.
 
@@ -159,14 +160,16 @@ The build process can be modified using different build time arguments (defined 
 | `LEPTONICA_VERSION`      | fundamental image processing and analysis library                                                                 | https://github.com/danbloomberg/leptonica/releases                                                                                        |
 | `OCR_LANG`               | Language to install (in addition to `eng` and `osd`)                                                              | https://github.com/tesseract-ocr/tessdata (`<lang>.traineddata`)                                                                          |
 | `TESSERACT_DATA_SUFFIX`  | Trained LSTM models for tesseract. Can be empty (default), `_best` (best inference) and `_fast` (fast inference). | https://github.com/tesseract-ocr/tessdata, https://github.com/tesseract-ocr/tessdata_best, https://github.com/tesseract-ocr/tessdata_fast |
-| `TESSERACT_DATA_VERSION` | Version of the trained LSTM models for tesseract. (currently - in January 2021 - only `4.0.0` is available)       | https://github.com/tesseract-ocr/tessdata/releases/tag/4.0.0                                                                              |
+| `TESSERACT_DATA_VERSION` | Version of the trained LSTM models for tesseract. (currently - in July 2022 - only `4.1.0` is available)       | https://github.com/tesseract-ocr/tessdata/releases/tag/4.1.0                                                                              |
 
 
 **Example of custom build**
 
 ```bash
 ## Build a Dockerimage based on Amazon Linux 1, with Tesseract 4.0.0
-docker build --build-arg TESSERACT_VERSION=4.0.0 -t tesseract-lambda-layer -f Dockerfile.al1 .
+docker build --build-arg TESSERACT_VERSION=4.0.0 --build-arg OCR_LANG=fra -t tesseract-lambda-layer -f Dockerfile.al1 .
+## Build a Dockerimage based on Amazon Linux 2, with French language support
+docker build --build-arg OCR_LANG=fra -t tesseract-lambda-layer-french -f Dockerfile.al2 .
 ```
 
 ## Deployment size optimization
@@ -180,10 +183,11 @@ RUN ... \
 
 The stripping can cause issues, when the build runtime and the lambda runtime are different (e.g. if building on Amazon Linux 1 and running on Amazon Linux 2).
 
-## Building directly using CDK
+## Building the layer binaries directly using CDK
 
-You can build the layer directly, when using AWS CDK, using the [`bundling` option](https://aws.amazon.com/blogs/devops/building-apps-with-aws-cdk/).
-See [`continous-integration/index.ts`](continous-integration/index.ts) and the [corresponding Github Workflow](https://github.com/bweigel/aws-lambda-tesseract-layer/actions?query=workflow%3A%22Continuos+Integration%22) for an example.
+You can build the layer directly and get the artifacts (like in [ready-to-use](./ready-to-use/)). This is done using AWS CDK with the [`bundling` option](https://aws.amazon.com/blogs/devops/building-apps-with-aws-cdk/).
+
+Refer to [continous-integration](./continous-integration/README.md) and the [corresponding Github Workflow](https://github.com/bweigel/aws-lambda-tesseract-layer/actions?query=workflow%3A%22Continuos+Integration%22) for an example.
 
 ## Layer contents
 
