@@ -12,6 +12,8 @@ Tesseract OCR Lambda Layer
 
 > AWS Lambda layer containing the [tesseract OCR](https://github.com/tesseract-ocr/tesseract) libraries and command-line binary for Lambda Runtimes running on Amazon Linux 1 and 2.
 
+> :warning: [The Amazon Linux AMI (Version 1) is being deprecated](https://aws.amazon.com/blogs/aws/update-on-amazon-linux-ami-end-of-life/). Users are advised to not use Lambda runtimes (i.e. Python 3.6) based on this version. Refer also to the [AWS Lambda runtime deprecation policy](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html#runtime-support-policy).
+
 <!-- TOC -->
 
 - [Tesseract OCR Lambda Layer](#tesseract-ocr-lambda-layer)
@@ -108,7 +110,7 @@ const stack = new Stack(app, 'tesseract-lambda-ci');
 const al2Layer = new lambda.LayerVersion(stack, 'al2-layer', {
     // reference the directory containing the ready-to-use layer
     code: Code.fromAsset(path.resolve(__dirname, './ready-to-use/amazonlinux-2')),
-    description: 'AL1 Tesseract Layer',
+    description: 'AL2 Tesseract Layer',
 });
 new lambda.Function(stack, 'python38', {
     // reference the source code to your function
@@ -142,10 +144,10 @@ unset CONTAINER
 
 ## available `Dockerfile`s
 
-| Dockerfile       | Base-Image     | compatible Runtimes                                                   |
-|:-----------------|:---------------|:----------------------------------------------------------------------|
-| `Dockerfile.al1` | Amazon Linux 1 | Python 2.7/3.6/3.7, Ruby 2.5, Java 8 (OpenJDK), Go 1.x, .NET Core 2.1 |
-| `Dockerfile.al2` | Amazon Linux 2 | Python 3.8, Ruby 2.7, Java 8/11 (Coretto), .NET Core 3.1              |
+| Dockerfile                              | Base-Image     | compatible Runtimes                                                   |
+| :-------------------------------------- | :------------- | :-------------------------------------------------------------------- |
+| `Dockerfile.al1` (:warning: deprecated) | Amazon Linux 1 | Python 2.7/3.6/3.7, Ruby 2.5, Java 8 (OpenJDK), Go 1.x, .NET Core 2.1 |
+| `Dockerfile.al2`                        | Amazon Linux 2 | Python 3.8, Ruby 2.7, Java 8/11 (Coretto), .NET Core 3.1              |
 
 
 ## Building a different tesseract version and/or language
@@ -155,21 +157,21 @@ Per default the build generates the [tesseract 4.1.3](https://github.com/tessera
 The build process can be modified using different build time arguments (defined as `ARG` in `Dockerfile.al[1|2]`), using the `--build-arg` option of `docker build`.
 
 | Build-Argument           | description                                                                                                       | available versions                                                                                                                        |
-|:-------------------------|:------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------|
+| :----------------------- | :---------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
 | `TESSERACT_VERSION`      | the tesseract OCR engine                                                                                          | https://github.com/tesseract-ocr/tesseract/releases                                                                                       |
 | `LEPTONICA_VERSION`      | fundamental image processing and analysis library                                                                 | https://github.com/danbloomberg/leptonica/releases                                                                                        |
 | `OCR_LANG`               | Language to install (in addition to `eng` and `osd`)                                                              | https://github.com/tesseract-ocr/tessdata (`<lang>.traineddata`)                                                                          |
 | `TESSERACT_DATA_SUFFIX`  | Trained LSTM models for tesseract. Can be empty (default), `_best` (best inference) and `_fast` (fast inference). | https://github.com/tesseract-ocr/tessdata, https://github.com/tesseract-ocr/tessdata_best, https://github.com/tesseract-ocr/tessdata_fast |
-| `TESSERACT_DATA_VERSION` | Version of the trained LSTM models for tesseract. (currently - in July 2022 - only `4.1.0` is available)       | https://github.com/tesseract-ocr/tessdata/releases/tag/4.1.0                                                                              |
+| `TESSERACT_DATA_VERSION` | Version of the trained LSTM models for tesseract. (currently - in July 2022 - only `4.1.0` is available)          | https://github.com/tesseract-ocr/tessdata/releases/tag/4.1.0                                                                              |
 
 
 **Example of custom build**
 
 ```bash
-## Build a Dockerimage based on Amazon Linux 1, with Tesseract 4.0.0
-docker build --build-arg TESSERACT_VERSION=4.0.0 --build-arg OCR_LANG=fra -t tesseract-lambda-layer -f Dockerfile.al1 .
 ## Build a Dockerimage based on Amazon Linux 2, with French language support
 docker build --build-arg OCR_LANG=fra -t tesseract-lambda-layer-french -f Dockerfile.al2 .
+## Build a Dockerimage based on Amazon Linux 2, with Tesseract 4.0.0 and french language support
+docker build --build-arg TESSERACT_VERSION=4.0.0 --build-arg OCR_LANG=fra -t tesseract-lambda-layer -f Dockerfile.al2 .
 ```
 
 ## Deployment size optimization
