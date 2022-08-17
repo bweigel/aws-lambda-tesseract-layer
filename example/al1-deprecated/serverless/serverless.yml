@@ -1,4 +1,4 @@
-service: tesseract-ocr-example-py38
+service: tesseract-ocr-example-py36
 frameworkVersion: ">=2.0.0"
 
 plugins:
@@ -14,18 +14,19 @@ custom:
     dockerFile: Dockerfile
 
 layers:
-  tesseractAl2:
+  tesseractAl1:
     # specify path to layer content
-    path: ../../ready-to-use/amazonlinux-2
+    path: ../../ready-to-use/amazonlinux-1
     compatibleRuntimes:
-      - python3.8
+      - python3.6
+      - python3.7
 
 functions:
   tesseract-ocr:
     handler: handler.main
-    runtime: python3.8
+    runtime: python3.6
     layers:
-      - { Ref: TesseractAl2LambdaLayer }
+      - { Ref: TesseractAl1LambdaLayer }
     events:
       - http:
           path: ocr

@@ -1,4 +1,4 @@
-Example: AWS Lambda with Tesseract layer (Amazon Linux 2 based runtime - Python 3.8)
+Example: AWS Lambda with Tesseract layer (Amazon Linux 1 based runtime - Python 3.6)
 ===
 
 ### Requirements
@@ -11,10 +11,8 @@ Example: AWS Lambda with Tesseract layer (Amazon Linux 2 based runtime - Python 
 ```bash
 ## install dependencies
 npm ci
-## if you haven't already, you need to bootstrap your account to work with cdk
-npx cdk bootstrap
 ## deploy
-npx cdk deploy
+npx sls deploy
 ```
 
 ![Deployment](./deployment.png)
@@ -23,12 +21,12 @@ npx cdk deploy
 
 ```bash
 curl -X POST \
-  https://16ary8rftd.execute-api.eu-central-1.amazonaws.com/prod/ocr \
+  https://i61tt4wbth.execute-api.eu-central-1.amazonaws.com/dev/ocr \
   -d https://upload.wikimedia.org/wikipedia/de/e/eb/Goethe_Faust_Textbeispiel_Grossschreibung.png
 ```
 
 ### Remove Stack
 
 ```
-npx cdk destroy
+npx sls remove
 ```
