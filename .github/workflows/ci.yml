@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        runtime: 'py38'
+        runtime: ['py38']
     defaults:
       run:
         working-directory: continous-integration
