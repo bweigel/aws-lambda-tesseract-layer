@@ -18,10 +18,9 @@
   },
   "scripts": {
     "synth": "npx cdk synth --app \"npx ts-node index-all.ts\"",
-    "test:integration:al1": "sam local invoke -t cdk.out/tesseract-lambda-ci.template.json al1-py36 --no-event > al1-test-output.txt && cat al1-test-output.txt | grep -Eiv \"(fail|error|exception)\"",
-    "test:integration:al2": "sam local invoke -t cdk.out/tesseract-lambda-ci.template.json al2-py38 --no-event > al2-test-output.txt && cat al2-test-output.txt | grep -Eiv \"(fail|error|exception)\"",
-    "bundle:binary:al1": "cp -r cdk.out/$(cat cdk.out/tesseract-lambda-ci.template.json | jq -r '.Resources.al1layer.Metadata.\"aws:asset:path\"')/. ../ready-to-use/amazonlinux-1",
-    "bundle:binary:al2": "cp -r cdk.out/$(cat cdk.out/tesseract-lambda-ci.template.json | jq -r '.Resources.al2layer.Metadata.\"aws:asset:path\"')/. ../ready-to-use/amazonlinux-2"
+    "test:integration:py38": "sam local invoke -t cdk.out/tesseract-lambda-ci.template.json py38 --no-event > py38-test-output.txt && cat py38-test-output.txt | grep -Eiv \"(fail|error|exception)\"",
+    "test:integration:node16": "sam local invoke -t cdk.out/tesseract-lambda-ci.template.json node16 --no-event > node16-test-output.txt && cat node16-test-output.txt | grep -Eiv \"(fail|error|exception)\"",
+    "bundle:binary": "cp -r cdk.out/$(cat cdk.out/tesseract-lambda-ci.template.json | jq -r '.Resources.al2layer.Metadata.\"aws:asset:path\"')/. ../ready-to-use/amazonlinux-2"
   },
   "jest": {
     "transform": {

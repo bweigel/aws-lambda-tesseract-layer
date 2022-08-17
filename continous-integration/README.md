@@ -14,14 +14,14 @@ Commands to reproduce:
 
 ```bash
 npm ci
-npx cdk --app 'npx ts-node index-al[1|2].ts' synth
-## run integration test using AL1 & Python 3.6
-npx npm run test:integration:al1
-## run integration test using AL2 & Python 3.8
-npx npm run test:integration:al2
+npx cdk --app 'npx ts-node index.ts' synth
+## run integration test using Python 3.8
+npx npm run test:integration:py38
+## run integration test using NodeJs 16
+npx npm run test:integration:node16
 ```
 
 ## Bundling
 
-After `npx cdk synth` was executed bundles of the binary can be created with `npm run bundle:binary:al1`.
+After `npx cdk synth` was executed bundles of the binary can be created with `npm run bundle:binary`.
 The bundles will be put into the `ready-to-use` folder.
