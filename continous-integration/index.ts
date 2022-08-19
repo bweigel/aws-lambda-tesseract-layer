@@ -41,3 +41,25 @@ new lambda.Function(stack, 'python3.8', {
     handler: 'handler.main',
 });
 
+
+new lambda.Function(stack, 'node16', {
+    code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda-handlers/node16'),
+    {
+        bundling: {
+            image: DockerImage.fromRegistry('public.ecr.aws/sam/build-nodejs16.x:latest'),
+            command: ['/bin/bash', '-c', [
+                'rm -rf node_modules && npm ci',
+                'cp -r node_modules /asset-output',
+                'cp faust.png /asset-output',
+                'cp index.js /asset-output',
+            ].join(' && ')],
+        }
+    }),
+    runtime: Runtime.NODEJS_16_X,
+    layers: [al2Layer],
+    functionName: `node16`,
+    memorySize: 512,
+    timeout: Duration.seconds(30),
+    handler: 'index.handler',
+});
+
