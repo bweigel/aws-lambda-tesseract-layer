@@ -25,7 +25,7 @@ new lambda.Function(stack, 'python3.8', {
     code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda-handlers/py38'),
     {
         bundling: {
-            image: DockerImage.fromRegistry('lambci/lambda:build-python3.8'),
+            image: DockerImage.fromRegistry('public.ecr.aws/sam/build-python3.8:latest'),
             command: ['/bin/bash', '-c', [
                 'pip install -r requirements.txt -t /asset-output/',
                 'cp faust.png /asset-output',
