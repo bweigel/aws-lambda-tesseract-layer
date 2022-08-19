@@ -1,7 +1,7 @@
-import * as lambda from '@aws-cdk/aws-lambda';
-import { CfnLayerVersion, Code, Runtime } from '@aws-cdk/aws-lambda';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { CfnLayerVersion, Code, Runtime } from 'aws-cdk-lib/aws-lambda';
 import * as path from 'path';
-import { App, BundlingDockerImage, Duration, Stack } from '@aws-cdk/core';
+import { App, DockerImage, Duration, Stack } from 'aws-cdk-lib';
 
 
 const app = new App();
@@ -13,18 +13,19 @@ const pathToLayerSource = path.resolve(__dirname, '..');
 const al2Layer = new lambda.LayerVersion(stack, 'al2-layer', {
     code: Code.fromAsset(pathToLayerSource, {
     bundling: {
-        image: BundlingDockerImage.fromAsset(pathToLayerSource, { file: '../Dockerfile.al2' }),
+        image: DockerImage.fromBuild(pathToLayerSource, { file: 'Dockerfile.al2' }),
         command: ['/bin/bash', '-c', 'cp -r /opt/build-dist/. /asset-output/'],
     },
     }),
     description: 'AL2 Tesseract Layer',
 });
 stack.renameLogicalId(stack.getLogicalId(al2Layer.node.defaultChild as CfnLayerVersion), 'al2layer')
+
 new lambda.Function(stack, 'python3.8', {
-    code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda-handlers'),
+    code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda-handlers/py38'),
     {
         bundling: {
-            image: BundlingDockerImage.fromRegistry('lambci/lambda:build-python3.8'),
+            image: DockerImage.fromRegistry('lambci/lambda:build-python3.8'),
             command: ['/bin/bash', '-c', [
                 'pip install -r requirements.txt -t /asset-output/',
                 'cp faust.png /asset-output',

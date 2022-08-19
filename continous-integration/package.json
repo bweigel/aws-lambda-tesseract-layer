@@ -34,14 +34,10 @@
     ]
   },
   "devDependencies": {
-    "@aws-cdk/assert": "^1.72.0",
-    "@aws-cdk/aws-lambda": "^1.72.0",
-    "@aws-cdk/core": "^1.72.0",
+    "aws-cdk-lib": "^2.0.0",
+    "constructs": "^10.0.0",
     "@types/jest": "^26.0.14",
     "@types/node": "^14.11.5",
-    "aws-cdk": "^1.66.0",
-    "constructs": "^3.0.8",
-    "jest-cdk-snapshot": "^1.4.1",
     "jest": "^26.5.2",
     "source-map-support": "^0.5.19",
     "ts-jest": "^26.4.1",
