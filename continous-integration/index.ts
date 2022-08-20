@@ -1,4 +1,5 @@
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as nodelambda from 'aws-cdk-lib/aws-lambda-nodejs';
 import { CfnLayerVersion, Code, Runtime } from 'aws-cdk-lib/aws-lambda';
 import * as path from 'path';
 import { App, DockerImage, Duration, Stack } from 'aws-cdk-lib';
@@ -42,24 +43,31 @@ new lambda.Function(stack, 'python3.8', {
 });
 
 
-new lambda.Function(stack, 'node16', {
-    code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda-handlers/node16'),
-    {
-        bundling: {
-            image: DockerImage.fromRegistry('public.ecr.aws/sam/build-nodejs16.x:latest'),
-            command: ['/bin/bash', '-c', [
-                'rm -rf node_modules && npm ci',
-                'cp -r node_modules /asset-output',
-                'cp faust.png /asset-output',
-                'cp index.js /asset-output',
-            ].join(' && ')],
-        }
-    }),
+new nodelambda.NodejsFunction(stack, 'node16', {
+    bundling: {
+        nodeModules: ['tesseractocr'],
+        commandHooks: {
+            beforeInstall() {
+                return [];
+              },
+            beforeBundling(inputDir: string, outputDir: string): string[] {
+              return [
+                `cp ${inputDir}/faust.png ${outputDir}`,
+              ];
+            },
+            afterBundling(inputDir: string, outputDir: string): string[] {
+              return [];
+            },
+        },
+    },
+    depsLockFilePath: path.resolve(__dirname, 'lambda-handlers/node16/package-lock.json'),
+
     runtime: Runtime.NODEJS_16_X,
+    entry: path.resolve(__dirname, 'lambda-handlers/node16/index.js'),
     layers: [al2Layer],
     functionName: `node16`,
     memorySize: 512,
     timeout: Duration.seconds(30),
-    handler: 'index.handler',
+    handler: 'handler',
 });
 
