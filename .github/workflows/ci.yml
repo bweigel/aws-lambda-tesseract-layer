@@ -11,9 +11,6 @@ jobs:
   test:
     name: Runtime ${{ matrix.runtime }}
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        runtime: ['py38']
     defaults:
       run:
         working-directory: continous-integration
@@ -29,5 +26,7 @@ jobs:
       run: npm ci
     - name: CDK Synth
       run: npx cdk synth --app "npx ts-node index.ts"
-    - name: Run integration test against Runtime ${{ matrix.runtime }}
-      run: npm run test:integration:${{ matrix.runtime }}
+    - name: Run integration test against Runtime Python 3.8
+      run: npm run test:integration:py38
+    - name: Run integration test against Runtime NodeJS 16
+      run: npm run test:integration:node16
