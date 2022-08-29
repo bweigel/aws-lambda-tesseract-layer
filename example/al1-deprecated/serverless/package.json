@@ -8,7 +8,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "serverless": "^2.00.0",
+    "serverless": "^2.72.3",
     "serverless-python-requirements": "^5.1.0"
   },
   "repository": {
