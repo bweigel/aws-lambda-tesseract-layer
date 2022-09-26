@@ -37,7 +37,7 @@
     "@aws-cdk/core": "^1.72.0",
     "@types/jest": "^26.0.14",
     "@types/node": "^14.11.5",
-    "aws-cdk": "^1.66.0",
+    "aws-cdk": "^1.174.0",
     "constructs": "^3.0.8",
     "jest-cdk-snapshot": "^1.4.1",
     "jest": "^26.5.2",
