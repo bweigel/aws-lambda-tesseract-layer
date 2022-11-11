@@ -1,26 +1,30 @@
-import * as lambda from '@aws-cdk/aws-lambda';
-import { Code, Runtime } from '@aws-cdk/aws-lambda';
-import { RestApi, LambdaIntegration } from '@aws-cdk/aws-apigateway';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { Architecture, Code, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { RestApi, LambdaIntegration } from 'aws-cdk-lib/aws-apigateway';
 import * as path from 'path';
-import { App, BundlingDockerImage, Duration, Stack } from '@aws-cdk/core';
+import { App, DockerImage, Duration, Stack } from 'aws-cdk-lib';
 
 
 const app = new App();
-const stack = new Stack(app, 'tesseract-ocr-example-cdk-py38');
+const stack = new Stack(app, 'tesseract-ocr-example-cdk-py38', {tags: {'owner': 'bgenz'}});
 
 /**
  * Artifacts for AL 2
  */
-const al2Layer = new lambda.LayerVersion(stack, 'al2-layer', {
+const amdLayer = new lambda.LayerVersion(stack, 'amd-layer', {
     code: Code.fromAsset(path.resolve(__dirname, '../../ready-to-use/amazonlinux-2')),
-    description: 'AL2 Tesseract Layer',
+    description: 'AL2 Tesseract Layer - AMD64',
+});
+const aarchLayer = new lambda.LayerVersion(stack, 'aarch-layer', {
+    code: Code.fromAsset(path.resolve(__dirname, '../../ready-to-use/amazonlinux-2-aarch64')),
+    description: 'AL2 Tesseract Layer - AARCH64',
 });
 
-const ocrFn = new lambda.Function(stack, 'python3.8', {
+const ocrFnAmd = new lambda.Function(stack, 'python3.8-amd', {
     code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda-handlers'),
     {
         bundling: {
-            image: BundlingDockerImage.fromRegistry('lambci/lambda:build-python3.8'),
+            image: DockerImage.fromRegistry('public.ecr.aws/sam/build-python3.8:1.62.0'),
             command: ['/bin/bash', '-c', [
                 'pip install -r requirements.txt -t /asset-output/',
                 'cp handler.py /asset-output',
@@ -28,14 +32,36 @@ const ocrFn = new lambda.Function(stack, 'python3.8', {
         }
     }),
     runtime: Runtime.PYTHON_3_8,
-    layers: [al2Layer],
+    architecture: Architecture.X86_64,
+    layers: [amdLayer],
+    memorySize: 1024,
+    timeout: Duration.seconds(10),
+    handler: 'handler.main',
+});
+
+const ocrFnAarch = new lambda.Function(stack, 'python3.8-aarch', {
+    code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda-handlers'),
+    {
+        bundling: {
+            image: DockerImage.fromRegistry('public.ecr.aws/sam/build-python3.8:1.62.0-arm64'),
+            command: ['/bin/bash', '-c', [
+                'pip install -r requirements.txt -t /asset-output/',
+                'cp handler.py /asset-output',
+            ].join(' && ')],
+        }
+    }),
+    runtime: Runtime.PYTHON_3_8,
+    architecture: Architecture.ARM_64,
+    layers: [amdLayer],
     memorySize: 1024,
     timeout: Duration.seconds(10),
     handler: 'handler.main',
 });
 
 const api = new RestApi(stack, 'ocr-api');
-const ocr = api.root.addResource('ocr');
-ocr.addMethod('POST', new LambdaIntegration(ocrFn, {proxy: true}));
+const amd = api.root.addResource('amd');
+const arm = api.root.addResource('arm');
+amd.addMethod('POST', new LambdaIntegration(ocrFnAmd, {proxy: true}));
+arm.addMethod('POST', new LambdaIntegration(ocrFnAarch, {proxy: true}));
 
 
