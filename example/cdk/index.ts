@@ -38,11 +38,11 @@ const ocrFnAarch = new lambda.Function(stack, 'python3.8-aarch', {
     code: lambda.Code.fromDockerBuild(path.resolve(__dirname, 'lambda-handlers'),
     {
         platform: 'linux/arm64',
-        file: 'Dockerfile',
+        file: 'Dockerfile.arm',
     }),
     runtime: Runtime.PYTHON_3_8,
     architecture: Architecture.ARM_64,
-    layers: [amdLayer],
+    layers: [aarchLayer],
     memorySize: 1024,
     timeout: Duration.seconds(10),
     handler: 'handler.main',
