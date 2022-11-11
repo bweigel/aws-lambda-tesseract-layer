@@ -1,5 +1,5 @@
 ## Builds binaries for Amazonlinux 2
-FROM lambci/lambda-base-2:build
+FROM public.ecr.aws/sam/build-provided.al2:1.62
 
 ARG LEPTONICA_VERSION=1.82.0
 ARG TESSERACT_VERSION=5.2.0
@@ -17,7 +17,7 @@ ARG TESSERACT_DATA_VERSION=4.1.0
 RUN yum makecache fast; yum clean all && yum -y update && yum -y upgrade; yum clean all && \
     yum install -y yum-plugin-ovl; yum clean all && yum -y groupinstall "Development Tools"; yum clean all
 
-RUN yum -y install gcc gcc-c++ make autoconf aclocal automake libtool \
+RUN yum -y install clang gcc-c++ make autoconf aclocal automake libtool \
     libjpeg-devel libpng-devel libtiff-devel zlib-devel \
     libzip-devel freetype-devel lcms2-devel libwebp-devel \
     libicu-devel tcl-devel tk-devel pango-devel cairo-devel; yum clean all
@@ -26,7 +26,7 @@ WORKDIR ${TMP_BUILD}/leptonica-build
 RUN curl -L https://github.com/DanBloomberg/leptonica/releases/download/${LEPTONICA_VERSION}/leptonica-${LEPTONICA_VERSION}.tar.gz | tar xz && cd ${TMP_BUILD}/leptonica-build/leptonica-${LEPTONICA_VERSION} && \
     ./configure --prefix=${LEPTONICA} && make && make install && cp -r ./src/.libs /opt/liblept
 
-RUN echo "/opt/leptonica/lib" > /etc/ld.so.conf.d/leptonica.conf && ldconfig
+RUN echo "/opt/leptonica/lib" > /etc/ld.so.conf.d/leptonica.conf && /usr/sbin/ldconfig
 
 WORKDIR ${TMP_BUILD}/autoconf-build
 RUN curl https://ftp.gnu.org/gnu/autoconf-archive/autoconf-archive-${AUTOCONF_ARCHIVE_VERSION}.tar.xz | tar xJ && \
@@ -35,7 +35,7 @@ RUN curl https://ftp.gnu.org/gnu/autoconf-archive/autoconf-archive-${AUTOCONF_AR
 WORKDIR ${TMP_BUILD}/tesseract-build
 RUN curl -L https://github.com/tesseract-ocr/tesseract/archive/${TESSERACT_VERSION}.tar.gz | tar xz && \
     cd tesseract-${TESSERACT_VERSION} && ./autogen.sh  && PKG_CONFIG_PATH=/opt/leptonica/lib/pkgconfig LIBLEPT_HEADERSDIR=/opt/leptonica/include \
-    ./configure --prefix=${TESSERACT} --with-extra-includes=/opt/leptonica/include --with-extra-libraries=/opt/leptonica/lib 'CXXFLAGS=-mavx2' && make && make install
+    ./configure --prefix=${TESSERACT} --with-extra-includes=/opt/leptonica/include --with-extra-libraries=/opt/leptonica/lib && make && make install
 
 WORKDIR /opt
 RUN mkdir -p ${DIST}/lib && mkdir -p ${DIST}/bin && \

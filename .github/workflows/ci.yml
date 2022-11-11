@@ -30,3 +30,15 @@ jobs:
       run: npm run test:integration:py38
     - name: Run integration test against Runtime NodeJS 16
       run: npm run test:integration:node16
+  arm64:
+    name: AARCH64
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: './'
+    steps:
+    - uses: actions/checkout@v2
+    - uses: pguyot/arm-runner-action@v2
+      with:
+        commands: |
+          docker build --platform linux/arm64 -t tesseract-lambda-layer -f Dockerfile.al2 .

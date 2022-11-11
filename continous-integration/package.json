@@ -17,7 +17,8 @@
     "url": "https://github.com/bweigel/aws-lambda-tesseract-layer.git"
   },
   "scripts": {
-    "synth": "npx cdk synth --app \"npx ts-node index-all.ts\"",
+    "synth": "npx cdk synth --app \"npx ts-node index.ts\"",
+    "synth:aarch64": "npx cdk synth --app \"npx ts-node index-aarch64.ts\"",
     "test:integration:py38": "sam local invoke -t cdk.out/tesseract-lambda-ci.template.json py38 --no-event > py38-test-output.txt && cat py38-test-output.txt | grep -Eiv \"(fail|error|exception)\"",
     "test:integration:node16": "sam local invoke -t cdk.out/tesseract-lambda-ci.template.json node16 --no-event > node16-test-output.txt && cat node16-test-output.txt | grep -Eiv \"(fail|error|exception)\"",
     "bundle:binary": "cp -r cdk.out/$(cat cdk.out/tesseract-lambda-ci.template.json | jq -r '.Resources.al2layer.Metadata.\"aws:asset:path\"')/. ../ready-to-use/amazonlinux-2"
