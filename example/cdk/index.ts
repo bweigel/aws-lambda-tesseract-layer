@@ -21,15 +21,10 @@ const aarchLayer = new lambda.LayerVersion(stack, 'aarch-layer', {
 });
 
 const ocrFnAmd = new lambda.Function(stack, 'python3.8-amd', {
-    code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda-handlers'),
+    code: lambda.Code.fromDockerBuild(path.resolve(__dirname, 'lambda-handlers'),
     {
-        bundling: {
-            image: DockerImage.fromRegistry('public.ecr.aws/sam/build-python3.8:1.62.0'),
-            command: ['/bin/bash', '-c', [
-                'pip install -r requirements.txt -t /asset-output/',
-                'cp handler.py /asset-output',
-            ].join(' && ')],
-        }
+        platform: 'linux/amd64',
+        file: 'Dockerfile',
     }),
     runtime: Runtime.PYTHON_3_8,
     architecture: Architecture.X86_64,
@@ -40,15 +35,10 @@ const ocrFnAmd = new lambda.Function(stack, 'python3.8-amd', {
 });
 
 const ocrFnAarch = new lambda.Function(stack, 'python3.8-aarch', {
-    code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda-handlers'),
+    code: lambda.Code.fromDockerBuild(path.resolve(__dirname, 'lambda-handlers'),
     {
-        bundling: {
-            image: DockerImage.fromRegistry('public.ecr.aws/sam/build-python3.8:1.62.0-arm64'),
-            command: ['/bin/bash', '-c', [
-                'pip install -r requirements.txt -t /asset-output/',
-                'cp handler.py /asset-output',
-            ].join(' && ')],
-        }
+        platform: 'linux/arm64',
+        file: 'Dockerfile',
     }),
     runtime: Runtime.PYTHON_3_8,
     architecture: Architecture.ARM_64,
