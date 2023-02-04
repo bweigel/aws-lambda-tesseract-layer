@@ -1,0 +1,43 @@
+name: "Bump tesseract version"
+on:
+  schedule:
+  - cron: "0 0 * * MON"
+  workflow_dispatch:
+
+jobs:
+  diff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        id: tesseract
+        with:
+          script: |
+            const latest = (await github.rest.repos.getLatestRelease({
+              owner: 'tesseract-ocr',
+              repo: 'tesseract',
+            })).data.tag_name;
+            return latest;
+      - uses: actions/github-script@v6
+        id: leptonica
+        with:
+          script: |
+            const latest = (await github.rest.repos.getLatestRelease({
+              owner: 'DanBloomberg',
+              repo: 'leptonica',
+            })).data.tag_name;
+            return latest;
+          result-encoding: string
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - name: update-dockerfile
+        run: |
+         sed -i 's/\(TESSERACT_VERSION=\).*$/\1${{ steps.tesseract.outputs.result }}/g' Dockerfile.al1
+         sed -i 's/\(TESSERACT_VERSION=\).*$/\1${{ steps.tesseract.outputs.result }}/g' Dockerfile.al2
+         sed -i 's/\(LEPTONICA_VERSION=\).*$/\1${{ steps.leptonica.outputs.result }}/g' Dockerfile.al1
+         sed -i 's/\(LEPTONICA_VERSION=\).*$/\1${{ steps.leptonica.outputs.result }}/g' Dockerfile.al2
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: "chore: bump tesseract to ${{ steps.tesseract.outputs.result }} & leptonica to ${{ steps.leptonica.outputs.result }}"
+          title: "chore: bump tesseract to ${{ steps.tesseract.outputs.result }} & leptonica to ${{ steps.leptonica.outputs.result }}"
