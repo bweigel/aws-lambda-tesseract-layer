@@ -42,6 +42,7 @@
     "build",
     "cdk.out",
     "**/__snapshots__",
+    "example",
     "!.projenrc.ts",
     "!projenrc/**/*.ts"
   ],

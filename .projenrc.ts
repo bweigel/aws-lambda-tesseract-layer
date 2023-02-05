@@ -2,7 +2,7 @@ import { awscdk, github } from 'projen';
 import { TrailingComma, UpgradeDependenciesSchedule } from 'projen/lib/javascript';
 
 const project = new awscdk.AwsCdkTypeScriptApp({
-  cdkVersion: '2.55.1',
+  cdkVersion: '2.63.2',
   defaultReleaseBranch: 'master',
   name: 'aws-lambda-tesseract-layer',
   description: 'A layer for AWS Lambda containing the tesseract C libraries and tesseract executable. ',
@@ -14,7 +14,6 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   dependabot: false,
   gitignore: ['layer', '.serverless', '.mypy_cache', '*.zip', '**/*test-output.txt'],
   autoApproveUpgrades: false,
-
   depsUpgrade: true,
   depsUpgradeOptions: {
     pullRequestTitle: 'Dependency update',
@@ -51,7 +50,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   eslintOptions: {
     dirs: ['continous-integration', 'example', 'layer'],
     prettier: true,
-    ignorePatterns: ['**/node_modules/', '*.d.ts', 'build', 'cdk.out', '**/__snapshots__'],
+    ignorePatterns: ['**/node_modules/', '*.d.ts', 'build', 'cdk.out', '**/__snapshots__', 'example'],
   },
 
   docgen: false,
