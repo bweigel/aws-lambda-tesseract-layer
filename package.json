@@ -26,6 +26,9 @@
     "test:integration:py38": "npx projen test:integration:py38",
     "test:watch": "npx projen test:watch",
     "upgrade": "npx projen upgrade",
+    "upgrade:all": "npx projen upgrade:all",
+    "upgrade:ci": "npx projen upgrade:ci",
+    "upgrade:examples": "npx projen upgrade:examples",
     "watch": "npx projen watch",
     "projen": "npx projen"
   },
@@ -34,7 +37,7 @@
     "@types/node": "^14",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
-    "aws-cdk": "^2.55.1",
+    "aws-cdk": "^2.63.2",
     "esbuild": "^0.17.5",
     "eslint": "^8",
     "eslint-config-prettier": "^8.6.0",
@@ -52,8 +55,8 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "aws-cdk-lib": "^2.55.1",
-    "constructs": "^10.0.5"
+    "aws-cdk-lib": "^2.63.2",
+    "constructs": "^10.1.241"
   },
   "license": "Apache-2.0",
   "version": "0.0.0",

@@ -26,11 +26,23 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   },
   scripts: {
     postinstall: 'npm ci --prefix example/cdk && npm ci --prefix example/serverless',
+    'post-upgrade': 'npx projen upgrade:all',
   },
   githubOptions: {
     mergify: true,
     projenCredentials: github.GithubCredentials.fromApp(),
   },
+  workflowBootstrapSteps: [
+    {
+      uses: 'actions/setup-python@v4',
+      with: {
+        'python-version': '3.10',
+      },
+    },
+    {
+      uses: 'aws-actions/setup-sam@v2',
+    },
+  ],
 
   buildWorkflow: true,
   postBuildSteps: [{ name: 'test-integration-sam-local', run: 'npx projen test:integration' }],
@@ -94,6 +106,58 @@ project.addTask(`bundle:binary`, {
     },
     {
       exec: `cp -r cdk.out/$(cat cdk.out/tesseract-lambda-ci.template.json | jq -r '.Resources.al2layer.Metadata.\"aws:asset:path\"')/. ./ready-to-use/amazonlinux-2`,
+    },
+  ],
+});
+project.addTask(`upgrade:all`, {
+  steps: [
+    {
+      spawn: `upgrade:examples`,
+    },
+    {
+      spawn: `upgrade:ci`,
+    },
+  ],
+});
+project.addTask('upgrade:examples', {
+  steps: [
+    {
+      exec: 'npm-check-updates --dep dev --upgrade --target=minor --prefix example/cdk',
+    },
+    {
+      exec: 'npm-check-updates --dep optional --upgrade --target=minor --prefix example/cdk',
+    },
+    {
+      exec: 'npm-check-updates --dep peer --upgrade --target=minor --prefix example/cdk',
+    },
+    {
+      exec: 'npm-check-updates --dep prod --upgrade --target=minor --prefix example/cdk',
+    },
+    {
+      exec: 'npm-check-updates --dep bundle --upgrade --target=minor --prefix example/cdk',
+    },
+  ],
+});
+project.addTask('upgrade:ci', {
+  steps: [
+    {
+      exec: 'npm-check-updates --dep dev --upgrade --target=minor --prefix continous-integration/lambda-handlers/node16',
+    },
+    {
+      exec: 'npm-check-updates --dep optional --upgrade --target=minor --prefix continous-integration/lambda-handlers/node16',
+    },
+    {
+      exec: 'npm-check-updates --dep peer --upgrade --target=minor --prefix continous-integration/lambda-handlers/node16',
+    },
+    {
+      exec: 'npm-check-updates --dep prod --upgrade --target=minor --prefix continous-integration/lambda-handlers/node16',
+    },
+    {
+      exec: 'npm-check-updates --dep bundle --upgrade --target=minor --prefix continous-integration/lambda-handlers/node16',
+    },
+    {
+      exec: 'pipenv lock && pipenv requirements > requirements.txt',
+      cwd: 'continous-integration/lambda-handlers/py38',
     },
   ],
 });

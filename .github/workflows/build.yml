@@ -19,6 +19,10 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - uses: aws-actions/setup-sam@v2
       - name: Install dependencies
         run: yarn install --check-files
       - name: build
