@@ -50,7 +50,7 @@
     "aws-cdk-lib": "^2.55.1",
     "constructs": "^10.0.5"
   },
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "version": "0.0.0",
   "jest": {
     "moduleNameMapper": {

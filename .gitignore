@@ -5,6 +5,7 @@
 !/.projen/files.json
 !/.github/workflows/pull-request-lint.yml
 !/package.json
+!/LICENSE
 !/.npmignore
 logs
 *.log
