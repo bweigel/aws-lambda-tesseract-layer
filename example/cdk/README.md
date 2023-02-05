@@ -10,9 +10,7 @@ Example: AWS Lambda with Tesseract layer (Amazon Linux 2 based runtime - Python 
 
 ```bash
 ## install dependencies
-npm ci
-## if you haven't already, you need to bootstrap your account to work with cdk
-npx cdk bootstrap
+yarn install
 ## deploy
 npx cdk deploy
 ```

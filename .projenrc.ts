@@ -6,7 +6,6 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   defaultReleaseBranch: 'master',
   name: 'aws-lambda-tesseract-layer',
   description: 'A layer for AWS Lambda containing the tesseract C libraries and tesseract executable. ',
-
   projenrcTs: true,
   srcdir: 'continous-integration',
 
@@ -24,7 +23,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     },
   },
   scripts: {
-    postinstall: 'npm ci --prefix example/cdk && npm ci --prefix example/serverless',
+    //postinstall: 'npm ci --prefix example/cdk && npm ci --prefix example/serverless',
     // 'post-upgrade': 'npx projen upgrade:all',
   },
   githubOptions: {
@@ -44,7 +43,10 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   ],
 
   buildWorkflow: true,
-  postBuildSteps: [{ name: 'test-integration-sam-local', run: 'npx projen test:integration' }],
+  postBuildSteps: [
+    { name: 'test-integration-sam-local', run: 'npx projen test:integration' },
+    { name: 'bundle', run: 'npx projen bundle:binary' },
+  ],
   eslint: true,
   prettier: false,
   eslintOptions: {
@@ -158,10 +160,26 @@ project.addTask('upgrade:ci', {
       exec: 'pipenv lock && pipenv requirements > requirements.txt',
       cwd: 'continous-integration/lambda-handlers/py38',
     },
+    {
+      exec: 'cp continous-integration/lambda-handlers/py38/requirements.txt example/cdk/lambda-handlers/requirements.txt',
+    },
+    {
+      exec: 'cp continous-integration/lambda-handlers/py38/requirements.txt example/serverless/requirements.txt',
+    },
   ],
 });
 project.eslint?.addRules({
   'prettier/prettier': ['error', { singleQuote: true, printWidth: 140, trailingComma: TrailingComma.ALL }],
+});
+
+/** Example */
+
+new awscdk.AwsCdkTypeScriptApp({
+  cdkVersion: '2.55.0',
+  name: 'aws-lambda-tesseract-layer-example',
+  defaultReleaseBranch: 'master',
+  parent: project,
+  outdir: 'example/cdk',
 });
 
 project.synth();

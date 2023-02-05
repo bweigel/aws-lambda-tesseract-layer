@@ -5,9 +5,6 @@
       "description": "Full release build",
       "steps": [
         {
-          "spawn": "default"
-        },
-        {
           "spawn": "pre-compile"
         },
         {
@@ -27,20 +24,6 @@
     "bundle": {
       "name": "bundle",
       "description": "Prepare assets"
-    },
-    "bundle:binary": {
-      "name": "bundle:binary",
-      "steps": [
-        {
-          "spawn": "synth:silent"
-        },
-        {
-          "exec": "rm -rf ./ready-to-use/amazonlinux-2/*"
-        },
-        {
-          "exec": "cp -r cdk.out/$(cat cdk.out/tesseract-lambda-ci.template.json | jq -r '.Resources.al2layer.Metadata.\"aws:asset:path\"')/. ./ready-to-use/amazonlinux-2"
-        }
-      ]
     },
     "clobber": {
       "name": "clobber",
@@ -83,7 +66,7 @@
       "description": "Synthesize project files",
       "steps": [
         {
-          "exec": "ts-node --project tsconfig.dev.json .projenrc.ts"
+          "exec": "node .projenrc.js"
         }
       ]
     },
@@ -133,7 +116,7 @@
       "description": "Runs eslint against the codebase",
       "steps": [
         {
-          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern continous-integration example layer test build-tools projenrc .projenrc.ts"
+          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src test build-tools .projenrc.js"
         }
       ]
     },
@@ -189,39 +172,6 @@
         }
       ]
     },
-    "test:integration": {
-      "name": "test:integration",
-      "steps": [
-        {
-          "spawn": "test:integration:py38"
-        },
-        {
-          "spawn": "test:integration:node16"
-        }
-      ]
-    },
-    "test:integration:node16": {
-      "name": "test:integration:node16",
-      "steps": [
-        {
-          "spawn": "synth:silent"
-        },
-        {
-          "exec": "sam local invoke -t cdk.out/tesseract-lambda-ci.template.json node16 --no-event > node16-test-output.txt && cat node16-test-output.txt | grep -Eiv \"(fail|error|exception)\""
-        }
-      ]
-    },
-    "test:integration:py38": {
-      "name": "test:integration:py38",
-      "steps": [
-        {
-          "spawn": "synth:silent"
-        },
-        {
-          "exec": "sam local invoke -t cdk.out/tesseract-lambda-ci.template.json py38 --no-event > py38-test-output.txt && cat py38-test-output.txt | grep -Eiv \"(fail|error|exception)\""
-        }
-      ]
-    },
     "test:watch": {
       "name": "test:watch",
       "description": "Run jest in watch mode",
@@ -233,7 +183,7 @@
     },
     "upgrade": {
       "name": "upgrade",
-      "description": "Dependency update",
+      "description": "upgrade dependencies",
       "env": {
         "CI": "0"
       },
@@ -267,67 +217,6 @@
         },
         {
           "spawn": "post-upgrade"
-        }
-      ]
-    },
-    "upgrade:all": {
-      "name": "upgrade:all",
-      "steps": [
-        {
-          "spawn": "upgrade:examples"
-        },
-        {
-          "spawn": "upgrade:ci"
-        }
-      ]
-    },
-    "upgrade:ci": {
-      "name": "upgrade:ci",
-      "steps": [
-        {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --prefix continous-integration/lambda-handlers/node16"
-        },
-        {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --prefix continous-integration/lambda-handlers/node16"
-        },
-        {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --prefix continous-integration/lambda-handlers/node16"
-        },
-        {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --prefix continous-integration/lambda-handlers/node16"
-        },
-        {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --prefix continous-integration/lambda-handlers/node16"
-        },
-        {
-          "exec": "pipenv lock && pipenv requirements > requirements.txt",
-          "cwd": "continous-integration/lambda-handlers/py38"
-        },
-        {
-          "exec": "cp continous-integration/lambda-handlers/py38/requirements.txt example/cdk/lambda-handlers/requirements.txt"
-        },
-        {
-          "exec": "cp continous-integration/lambda-handlers/py38/requirements.txt example/serverless/requirements.txt"
-        }
-      ]
-    },
-    "upgrade:examples": {
-      "name": "upgrade:examples",
-      "steps": [
-        {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --prefix example/cdk"
-        },
-        {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --prefix example/cdk"
-        },
-        {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --prefix example/cdk"
-        },
-        {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --prefix example/cdk"
-        },
-        {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --prefix example/cdk"
         }
       ]
     },

@@ -16,7 +16,6 @@
     "package": "npx projen package",
     "post-compile": "npx projen post-compile",
     "post-upgrade": "npx projen post-upgrade",
-    "postinstall": "npx projen postinstall",
     "pre-compile": "npx projen pre-compile",
     "synth": "npx projen synth",
     "synth:silent": "npx projen synth:silent",
