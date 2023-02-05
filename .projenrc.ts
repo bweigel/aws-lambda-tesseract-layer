@@ -25,7 +25,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     },
   },
   scripts: {
-    //postinstall: 'npm ci --prefix src/lambdas/deepl-app',
+    postinstall: 'npm ci --prefix example/cdk && npm ci --prefix example/cdk',
   },
   githubOptions: {
     mergify: true,
@@ -43,7 +43,6 @@ const project = new awscdk.AwsCdkTypeScriptApp({
 
   // Don't generate docs. This takes too long and basically copies the official CDK Docs.
   docgen: false,
-
   licensed: true,
 
   // see https://github.com/aws/aws-cdk/issues/20622#issuecomment-1300400594
