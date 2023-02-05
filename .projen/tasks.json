@@ -35,6 +35,9 @@
           "spawn": "synth:silent"
         },
         {
+          "exec": "rm -rf ./ready-to-use/amazonlinux-2/*"
+        },
+        {
           "exec": "cp -r cdk.out/$(cat cdk.out/tesseract-lambda-ci.template.json | jq -r '.Resources.al2layer.Metadata.\"aws:asset:path\"')/. ./ready-to-use/amazonlinux-2"
         }
       ]
@@ -191,6 +194,17 @@
         },
         {
           "spawn": "eslint"
+        }
+      ]
+    },
+    "test:integration": {
+      "name": "test:integration",
+      "steps": [
+        {
+          "spawn": "test:integration:py38"
+        },
+        {
+          "spawn": "test:integration:node16"
         }
       ]
     },

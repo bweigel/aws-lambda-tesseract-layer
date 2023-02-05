@@ -21,6 +21,7 @@
     "synth": "npx projen synth",
     "synth:silent": "npx projen synth:silent",
     "test": "npx projen test",
+    "test:integration": "npx projen test:integration",
     "test:integration:node16": "npx projen test:integration:node16",
     "test:integration:py38": "npx projen test:integration:py38",
     "test:watch": "npx projen test:watch",

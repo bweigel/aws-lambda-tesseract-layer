@@ -33,6 +33,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   },
 
   buildWorkflow: true,
+  postBuildSteps: [{ name: 'test-integration-sam-local', run: 'npx projen test:integration' }],
   eslint: true,
   prettier: false,
   eslintOptions: {
@@ -43,7 +44,6 @@ const project = new awscdk.AwsCdkTypeScriptApp({
 
   docgen: false,
   licensed: true,
-
   // see https://github.com/aws/aws-cdk/issues/20622#issuecomment-1300400594
   jestOptions: {
     jestConfig: {
@@ -74,17 +74,29 @@ project.addTask(`test:integration:node16`, {
     },
   ],
 });
+project.addTask(`test:integration`, {
+  steps: [
+    {
+      spawn: `test:integration:py38`,
+    },
+    {
+      spawn: `test:integration:node16`,
+    },
+  ],
+});
 project.addTask(`bundle:binary`, {
   steps: [
     {
       spawn: `synth:silent`,
     },
     {
+      exec: `rm -rf ./ready-to-use/amazonlinux-2/*`,
+    },
+    {
       exec: `cp -r cdk.out/$(cat cdk.out/tesseract-lambda-ci.template.json | jq -r '.Resources.al2layer.Metadata.\"aws:asset:path\"')/. ./ready-to-use/amazonlinux-2`,
     },
   ],
 });
-
 project.eslint?.addRules({
   'prettier/prettier': ['error', { singleQuote: true, printWidth: 140, trailingComma: TrailingComma.ALL }],
 });

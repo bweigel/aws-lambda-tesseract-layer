@@ -23,6 +23,8 @@ jobs:
         run: yarn install --check-files
       - name: build
         run: npx projen build
+      - name: test-integration-sam-local
+        run: npx projen test:integration
       - name: Find mutations
         id: self_mutation
         run: |-
