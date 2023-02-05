@@ -41,7 +41,7 @@ WORKDIR /opt
 RUN mkdir -p ${DIST}/lib && mkdir -p ${DIST}/bin && \
     cp ${TESSERACT}/bin/tesseract ${DIST}/bin/ && \
     cp ${TESSERACT}/lib/libtesseract.so.5  ${DIST}/lib/ && \
-    cp ${LEPTONICA}/lib/liblept.so.5 ${DIST}/lib/liblept.so.5 && \
+    cp ${LEPTONICA}/lib/libleptonica.so.6.0.0 ${DIST}/lib/libleptonica.so.6 && \
     cp /usr/lib64/libgomp.so.1 ${DIST}/lib/ && \
     cp /usr/lib64/libwebp.so.4 ${DIST}/lib/ && \
     cp /usr/lib64/libpng15.so.15 ${DIST}/lib/ && \
