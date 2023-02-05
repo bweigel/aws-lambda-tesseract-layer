@@ -25,7 +25,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   },
   scripts: {
     postinstall: 'npm ci --prefix example/cdk && npm ci --prefix example/serverless',
-    'post-upgrade': 'npx projen upgrade:all',
+    // 'post-upgrade': 'npx projen upgrade:all',
   },
   githubOptions: {
     mergify: true,

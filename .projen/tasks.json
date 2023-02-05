@@ -152,11 +152,7 @@
     },
     "post-upgrade": {
       "name": "post-upgrade",
-      "steps": [
-        {
-          "exec": "npx projen upgrade:all"
-        }
-      ]
+      "description": "Runs after upgrading dependencies"
     },
     "postinstall": {
       "name": "postinstall",
