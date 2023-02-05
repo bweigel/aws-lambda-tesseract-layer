@@ -1,8 +1,8 @@
 ## Builds binaries for Amazonlinux 2
 FROM lambci/lambda-base-2:build
 
-ARG LEPTONICA_VERSION=1.82.0
-ARG TESSERACT_VERSION=5.2.0
+ARG LEPTONICA_VERSION=1.83.1
+ARG TESSERACT_VERSION=5.3.0
 ARG AUTOCONF_ARCHIVE_VERSION=2017.09.28
 ARG TMP_BUILD=/tmp
 ARG TESSERACT=/opt/tesseract
@@ -41,7 +41,7 @@ WORKDIR /opt
 RUN mkdir -p ${DIST}/lib && mkdir -p ${DIST}/bin && \
     cp ${TESSERACT}/bin/tesseract ${DIST}/bin/ && \
     cp ${TESSERACT}/lib/libtesseract.so.5  ${DIST}/lib/ && \
-    cp ${LEPTONICA}/lib/liblept.so.5 ${DIST}/lib/liblept.so.5 && \
+    cp ${LEPTONICA}/lib/libleptonica.so.6.0.0 ${DIST}/lib/libleptonica.so.6 && \
     cp /usr/lib64/libgomp.so.1 ${DIST}/lib/ && \
     cp /usr/lib64/libwebp.so.4 ${DIST}/lib/ && \
     cp /usr/lib64/libpng15.so.15 ${DIST}/lib/ && \
