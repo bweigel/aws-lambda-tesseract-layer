@@ -25,7 +25,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     },
   },
   scripts: {
-    postinstall: 'npm ci --prefix example/cdk && npm ci --prefix example/cdk',
+    postinstall: 'npm ci --prefix example/cdk && npm ci --prefix example/serverless',
   },
   githubOptions: {
     mergify: true,
@@ -41,7 +41,6 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     ignorePatterns: ['**/node_modules/', '*.d.ts', 'build', 'cdk.out', '**/__snapshots__'],
   },
 
-  // Don't generate docs. This takes too long and basically copies the official CDK Docs.
   docgen: false,
   licensed: true,
 
@@ -53,6 +52,37 @@ const project = new awscdk.AwsCdkTypeScriptApp({
       },
     },
   },
+});
+
+project.addTask(`test:integration:py38`, {
+  steps: [
+    {
+      spawn: `synth:silent`,
+    },
+    {
+      exec: `sam local invoke -t cdk.out/tesseract-lambda-ci.template.json py38 --no-event > py38-test-output.txt && cat py38-test-output.txt | grep -Eiv \"(fail|error|exception)\"`,
+    },
+  ],
+});
+project.addTask(`test:integration:node16`, {
+  steps: [
+    {
+      spawn: `synth:silent`,
+    },
+    {
+      exec: `sam local invoke -t cdk.out/tesseract-lambda-ci.template.json node16 --no-event > node16-test-output.txt && cat node16-test-output.txt | grep -Eiv \"(fail|error|exception)\"`,
+    },
+  ],
+});
+project.addTask(`bundle:binary`, {
+  steps: [
+    {
+      spawn: `synth:silent`,
+    },
+    {
+      exec: `cp -r cdk.out/$(cat cdk.out/tesseract-lambda-ci.template.json | jq -r '.Resources.al2layer.Metadata.\"aws:asset:path\"')/. ./ready-to-use/amazonlinux-2`,
+    },
+  ],
 });
 
 project.eslint?.addRules({

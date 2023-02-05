@@ -28,6 +28,17 @@
       "name": "bundle",
       "description": "Prepare assets"
     },
+    "bundle:binary": {
+      "name": "bundle:binary",
+      "steps": [
+        {
+          "spawn": "synth:silent"
+        },
+        {
+          "exec": "cp -r cdk.out/$(cat cdk.out/tesseract-lambda-ci.template.json | jq -r '.Resources.al2layer.Metadata.\"aws:asset:path\"')/. ./ready-to-use/amazonlinux-2"
+        }
+      ]
+    },
     "clobber": {
       "name": "clobber",
       "description": "hard resets to HEAD of origin and cleans the local repo",
@@ -140,6 +151,14 @@
       "name": "post-upgrade",
       "description": "Runs after upgrading dependencies"
     },
+    "postinstall": {
+      "name": "postinstall",
+      "steps": [
+        {
+          "exec": "npm ci --prefix example/cdk && npm ci --prefix example/serverless"
+        }
+      ]
+    },
     "pre-compile": {
       "name": "pre-compile",
       "description": "Prepare the project for compilation"
@@ -172,6 +191,28 @@
         },
         {
           "spawn": "eslint"
+        }
+      ]
+    },
+    "test:integration:node16": {
+      "name": "test:integration:node16",
+      "steps": [
+        {
+          "spawn": "synth:silent"
+        },
+        {
+          "exec": "sam local invoke -t cdk.out/tesseract-lambda-ci.template.json node16 --no-event > node16-test-output.txt && cat node16-test-output.txt | grep -Eiv \"(fail|error|exception)\""
+        }
+      ]
+    },
+    "test:integration:py38": {
+      "name": "test:integration:py38",
+      "steps": [
+        {
+          "spawn": "synth:silent"
+        },
+        {
+          "exec": "sam local invoke -t cdk.out/tesseract-lambda-ci.template.json py38 --no-event > py38-test-output.txt && cat py38-test-output.txt | grep -Eiv \"(fail|error|exception)\""
         }
       ]
     },
