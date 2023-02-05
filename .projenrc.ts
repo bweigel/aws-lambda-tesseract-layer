@@ -1,5 +1,5 @@
 import { awscdk, github } from 'projen';
-import { TrailingComma, UpgradeDependenciesSchedule } from 'projen/lib/javascript';
+import { NodeProject, TrailingComma, UpgradeDependenciesSchedule } from 'projen/lib/javascript';
 
 const project = new awscdk.AwsCdkTypeScriptApp({
   cdkVersion: '2.63.2',
@@ -24,7 +24,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   },
   scripts: {
     //postinstall: 'npm ci --prefix example/cdk && npm ci --prefix example/serverless',
-    // 'post-upgrade': 'npx projen upgrade:all',
+    'post-upgrade': 'npx projen upgrade:ci:py',
   },
   githubOptions: {
     mergify: true,
@@ -110,58 +110,14 @@ project.addTask(`bundle:binary`, {
     },
   ],
 });
-project.addTask(`upgrade:all`, {
+project.addTask('upgrade:ci:py', {
   steps: [
-    {
-      spawn: `upgrade:examples`,
-    },
-    {
-      spawn: `upgrade:ci`,
-    },
-  ],
-});
-project.addTask('upgrade:examples', {
-  steps: [
-    {
-      exec: 'npm-check-updates --dep dev --upgrade --target=minor --prefix example/cdk',
-    },
-    {
-      exec: 'npm-check-updates --dep optional --upgrade --target=minor --prefix example/cdk',
-    },
-    {
-      exec: 'npm-check-updates --dep peer --upgrade --target=minor --prefix example/cdk',
-    },
-    {
-      exec: 'npm-check-updates --dep prod --upgrade --target=minor --prefix example/cdk',
-    },
-    {
-      exec: 'npm-check-updates --dep bundle --upgrade --target=minor --prefix example/cdk',
-    },
-  ],
-});
-project.addTask('upgrade:ci', {
-  steps: [
-    {
-      exec: 'npm-check-updates --dep dev --upgrade --target=minor --prefix continous-integration/lambda-handlers/node16',
-    },
-    {
-      exec: 'npm-check-updates --dep optional --upgrade --target=minor --prefix continous-integration/lambda-handlers/node16',
-    },
-    {
-      exec: 'npm-check-updates --dep peer --upgrade --target=minor --prefix continous-integration/lambda-handlers/node16',
-    },
-    {
-      exec: 'npm-check-updates --dep prod --upgrade --target=minor --prefix continous-integration/lambda-handlers/node16',
-    },
-    {
-      exec: 'npm-check-updates --dep bundle --upgrade --target=minor --prefix continous-integration/lambda-handlers/node16',
-    },
     {
       exec: 'pipenv lock && pipenv requirements > requirements.txt',
       cwd: 'continous-integration/lambda-handlers/py38',
     },
     {
-      exec: 'cp continous-integration/lambda-handlers/py38/requirements.txt example/cdk/lambda-handlers/requirements.txt',
+      exec: 'cp continous-integration/lambda-handlers/py38/requirements.txt example/cdk/src/lambda-handlers/requirements.txt',
     },
     {
       exec: 'cp continous-integration/lambda-handlers/py38/requirements.txt example/serverless/requirements.txt',
@@ -180,6 +136,17 @@ new awscdk.AwsCdkTypeScriptApp({
   defaultReleaseBranch: 'master',
   parent: project,
   outdir: 'example/cdk',
+  depsUpgrade: true,
+  licensed: false,
+});
+new NodeProject({
+  name: 'node-lambda',
+  defaultReleaseBranch: 'master',
+  parent: project,
+  outdir: 'continous-integration/lambda-handlers/node16',
+  deps: ['tesseractocr'],
+  depsUpgrade: true,
+  licensed: false,
 });
 
 project.synth();

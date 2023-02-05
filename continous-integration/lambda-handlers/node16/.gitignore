@@ -32,15 +32,3 @@ jspm_packages/
 /test-reports/
 junit.xml
 /coverage/
-!/test/
-!/tsconfig.json
-!/tsconfig.dev.json
-!/src/
-/lib
-/dist/
-!/.eslintrc.json
-/assets/
-!/cdk.json
-/cdk.out/
-.cdk.staging/
-.parcel-cache/

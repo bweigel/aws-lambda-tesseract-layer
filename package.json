@@ -25,9 +25,7 @@
     "test:integration:py38": "npx projen test:integration:py38",
     "test:watch": "npx projen test:watch",
     "upgrade": "npx projen upgrade",
-    "upgrade:all": "npx projen upgrade:all",
-    "upgrade:ci": "npx projen upgrade:ci",
-    "upgrade:examples": "npx projen upgrade:examples",
+    "upgrade:ci:py": "npx projen upgrade:ci:py",
     "watch": "npx projen watch",
     "projen": "npx projen"
   },

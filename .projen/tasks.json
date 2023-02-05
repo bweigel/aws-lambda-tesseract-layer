@@ -152,7 +152,11 @@
     },
     "post-upgrade": {
       "name": "post-upgrade",
-      "description": "Runs after upgrading dependencies"
+      "steps": [
+        {
+          "exec": "npx projen upgrade:ci:py"
+        }
+      ]
     },
     "pre-compile": {
       "name": "pre-compile",
@@ -270,64 +274,18 @@
         }
       ]
     },
-    "upgrade:all": {
-      "name": "upgrade:all",
+    "upgrade:ci:py": {
+      "name": "upgrade:ci:py",
       "steps": [
-        {
-          "spawn": "upgrade:examples"
-        },
-        {
-          "spawn": "upgrade:ci"
-        }
-      ]
-    },
-    "upgrade:ci": {
-      "name": "upgrade:ci",
-      "steps": [
-        {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --prefix continous-integration/lambda-handlers/node16"
-        },
-        {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --prefix continous-integration/lambda-handlers/node16"
-        },
-        {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --prefix continous-integration/lambda-handlers/node16"
-        },
-        {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --prefix continous-integration/lambda-handlers/node16"
-        },
-        {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --prefix continous-integration/lambda-handlers/node16"
-        },
         {
           "exec": "pipenv lock && pipenv requirements > requirements.txt",
           "cwd": "continous-integration/lambda-handlers/py38"
         },
         {
-          "exec": "cp continous-integration/lambda-handlers/py38/requirements.txt example/cdk/lambda-handlers/requirements.txt"
+          "exec": "cp continous-integration/lambda-handlers/py38/requirements.txt example/cdk/src/lambda-handlers/requirements.txt"
         },
         {
           "exec": "cp continous-integration/lambda-handlers/py38/requirements.txt example/serverless/requirements.txt"
-        }
-      ]
-    },
-    "upgrade:examples": {
-      "name": "upgrade:examples",
-      "steps": [
-        {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --prefix example/cdk"
-        },
-        {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --prefix example/cdk"
-        },
-        {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --prefix example/cdk"
-        },
-        {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --prefix example/cdk"
-        },
-        {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --prefix example/cdk"
         }
       ]
     },
