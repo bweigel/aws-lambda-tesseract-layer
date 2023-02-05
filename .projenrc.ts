@@ -145,6 +145,7 @@ new NodeProject({
   parent: project,
   outdir: 'continous-integration/lambda-handlers/node16',
   deps: ['tesseractocr'],
+  devDeps: ['esbuild'],
   depsUpgrade: true,
   licensed: false,
 });

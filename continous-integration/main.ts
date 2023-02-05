@@ -55,7 +55,7 @@ new nodelambda.NodejsFunction(stack, 'node16', {
       },
     },
   },
-  depsLockFilePath: path.resolve(__dirname, 'lambda-handlers/node16/package-lock.json'),
+  depsLockFilePath: path.resolve(__dirname, 'lambda-handlers/node16/yarn.lock'),
 
   runtime: Runtime.NODEJS_16_X,
   entry: path.resolve(__dirname, 'lambda-handlers/node16/index.js'),
