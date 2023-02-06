@@ -1,4 +1,5 @@
-import { awscdk, github } from 'projen';
+import { exec } from 'child_process';
+import { awscdk, Component, github } from 'projen';
 import { NodeProject, TrailingComma, UpgradeDependenciesSchedule } from 'projen/lib/javascript';
 
 const project = new awscdk.AwsCdkTypeScriptApp({
@@ -66,6 +67,26 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     },
   },
 });
+
+class BinaryPatchComponent extends Component {
+  /**
+   * Hacky way to get binary patch
+   */
+  postSynthesize(): void {
+    exec("sed -i 's/\\(git diff\\)/\\1 --binary/g' .github/workflows/build.yml", (err, stdout, stderr) => {
+      if (err) {
+        console.log(`error: ${err.message}`);
+        return;
+      }
+      if (stderr) {
+        console.log(`stderr: ${stderr}`);
+        return;
+      }
+    });
+  }
+}
+
+new BinaryPatchComponent(project);
 
 project.addTask(`test:integration:py38`, {
   steps: [
