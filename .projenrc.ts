@@ -73,7 +73,7 @@ class BinaryPatchComponent extends Component {
    * Hacky way to get binary patch
    */
   postSynthesize(): void {
-    exec("sed -i 's/\\(git diff\\)/\\1 --binary/g' .github/workflows/build.yml", (err, stdout, stderr) => {
+    exec("sed -i 's/\\(git diff\\)/\\1 --binary/g' .github/workflows/build.yml", (err, _, stderr) => {
       if (err) {
         console.log(`error: ${err.message}`);
         return;
