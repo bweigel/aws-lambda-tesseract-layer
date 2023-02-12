@@ -38,6 +38,10 @@ jobs:
          sed -i 's/\(TESSERACT_VERSION=\)[0-9\.]*$/\1${{ steps.tesseract.outputs.result }}/g' Dockerfile.al2
          sed -i 's/\(LEPTONICA_VERSION=\)[0-9\.]*$/\1${{ steps.leptonica.outputs.result }}/g' Dockerfile.al1
          sed -i 's/\(LEPTONICA_VERSION=\)[0-9\.]*$/\1${{ steps.leptonica.outputs.result }}/g' Dockerfile.al2
+      - name: update-README
+        run: |
+         sed -i 's/\(https:\/\/img\.shields\.io\/badge\/Tesseract-\)\(v\?\([0-9]\+\.\?\)\{3\}\)\(-green\)/\1${{ steps.tesseract.outputs.result }}\4/g' README.md
+         sed -i 's/\(https:\/\/img\.shields\.io\/badge\/Leptonica-\)\(v\?\([0-9]\+\.\?\)\{3\}\)\(-green\)/\1${{ steps.leptonica.outputs.result }}\4/g' README.md
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
