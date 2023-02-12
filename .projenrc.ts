@@ -60,7 +60,6 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     prettier: true,
     ignorePatterns: ['**/node_modules/', '*.d.ts', 'build', 'cdk.out', '**/__snapshots__', 'example'],
   },
-
   docgen: false,
   licensed: true,
   // see https://github.com/aws/aws-cdk/issues/20622#issuecomment-1300400594
@@ -136,6 +135,9 @@ project.addTask(`bundle:binary`, {
     },
   ],
 });
+project.packageTask.prependExec(`mkdir -p ./dist`);
+project.packageTask.prependExec(`rm -rf ./dist`);
+project.packageTask.exec(`zip -r ../../dist/tesseract-al2-x86.zip .`, { cwd: './ready-to-use/amazonlinux-2' });
 project.addTask('upgrade:ci:py', {
   steps: [
     {

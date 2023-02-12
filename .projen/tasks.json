@@ -139,7 +139,19 @@
     },
     "package": {
       "name": "package",
-      "description": "Creates the distribution package"
+      "description": "Creates the distribution package",
+      "steps": [
+        {
+          "exec": "rm -rf ./dist"
+        },
+        {
+          "exec": "mkdir -p ./dist"
+        },
+        {
+          "exec": "zip -r ../../dist/tesseract-al2-x86.zip .",
+          "cwd": "./ready-to-use/amazonlinux-2"
+        }
+      ]
     },
     "post-compile": {
       "name": "post-compile",
