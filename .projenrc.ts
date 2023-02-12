@@ -21,6 +21,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
       // Don't forget to set GitHub App credentials in Repo.
       projenCredentials: github.GithubCredentials.fromApp(),
       schedule: UpgradeDependenciesSchedule.WEEKLY,
+      labels: ['dependencies'],
     },
   },
   scripts: {
@@ -30,6 +31,9 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   githubOptions: {
     mergify: true,
     projenCredentials: github.GithubCredentials.fromApp(),
+    pullRequestLintOptions: {
+      semanticTitleOptions: { types: ['feat', 'fix', 'chore', 'build'] },
+    },
   },
   workflowBootstrapSteps: [
     {
@@ -44,6 +48,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   ],
 
   buildWorkflow: true,
+  package: false,
   postBuildSteps: [
     { name: 'test-integration-sam-local', run: 'npx projen test:integration' },
     { name: 'bundle', run: 'npx projen bundle:binary' },
