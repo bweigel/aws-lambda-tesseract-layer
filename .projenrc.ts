@@ -55,16 +55,16 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     },
   ],
   versionrcOptions: {
-    "types": [
-      {"type": "feat", "hidden": true},
-      {"type": "fix", "hidden": true},
-      {"type": "chore", "hidden": true},
-      {"type": "docs", "hidden": true},
-      {"type": "style", "hidden": true},
-      {"type": "refactor", "hidden": true},
-      {"type": "perf", "hidden": true},
-      {"type": "test", "hidden": true}
-  ]
+    types: [
+      { type: 'feat', hidden: true },
+      { type: 'fix', hidden: true },
+      { type: 'chore', hidden: true },
+      { type: 'docs', hidden: true },
+      { type: 'style', hidden: true },
+      { type: 'refactor', hidden: true },
+      { type: 'perf', hidden: true },
+      { type: 'test', hidden: true },
+    ],
   },
 
   buildWorkflow: true,
@@ -181,21 +181,21 @@ project.release?.addJobs({
       {
         uses: 'actions/setup-node@v3',
         with: {
-          'node-version': '14.x'
-        }
+          'node-version': '14.x',
+        },
       },
       {
         name: 'Download build artifacts',
         uses: 'actions/download-artifact@v3',
         with: {
           name: 'build-artifact',
-          path: 'dist'
-        }
+          path: 'dist',
+        },
       },
       {
         name: 'Restore build artifact permissions',
         run: 'cd dist && setfacl --restore=permissions-backup.acl',
-        continueOnError: true
+        continueOnError: true,
       },
       {
         name: 'Upload Release Artifacts',
@@ -204,11 +204,11 @@ project.release?.addJobs({
           GITHUB_REPOSITORY: '${{ github.repository }}',
           GITHUB_REF: '${{ github.ref }}',
         },
-        run: 'errout=$(mktemp); gh release upload $(cat dist/releasetag.txt) --clobber -R $GITHUB_REPOSITORY dist/tesseract-al2-x86.zip 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi'
-      }
-    ]
-  }
-})
+        run: 'errout=$(mktemp); gh release upload $(cat dist/releasetag.txt) --clobber -R $GITHUB_REPOSITORY dist/tesseract-al2-x86.zip 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi',
+      },
+    ],
+  },
+});
 project.eslint?.addRules({
   'prettier/prettier': ['error', { singleQuote: true, printWidth: 140, trailingComma: TrailingComma.ALL }],
 });
