@@ -16,20 +16,19 @@ Tesseract OCR Lambda Layer
 
 <!-- TOC -->
 
-- [Tesseract OCR Lambda Layer](#tesseract-ocr-lambda-layer)
 - [Quickstart](#quickstart)
 - [Ready-to-use binaries](#ready-to-use-binaries)
-  - [Use with Serverless Framework](#use-with-serverless-framework)
-  - [Use with AWS CDK](#use-with-aws-cdk)
+    - [Use with Serverless Framework](#use-with-serverless-framework)
+    - [Use with AWS CDK](#use-with-aws-cdk)
 - [Build tesseract layer from source using Docker](#build-tesseract-layer-from-source-using-docker)
-  - [available `Dockerfile`s](#available-dockerfiles)
-  - [Building a different tesseract version and/or language](#building-a-different-tesseract-version-andor-language)
-  - [Deployment size optimization](#deployment-size-optimization)
-  - [Building the layer binaries directly using CDK](#building-the-layer-binaries-directly-using-cdk)
-  - [Layer contents](#layer-contents)
+    - [available `Dockerfile`s](#available-dockerfiles)
+    - [Building a different tesseract version and/or language](#building-a-different-tesseract-version-andor-language)
+    - [Deployment size optimization](#deployment-size-optimization)
+    - [Building the layer binaries directly using CDK](#building-the-layer-binaries-directly-using-cdk)
+    - [Layer contents](#layer-contents)
 - [Known Issues](#known-issues)
-  - [Avoiding Pillow library issues](#avoiding-pillow-library-issues)
-  - [Unable to import module 'handler': cannot import name '_imaging'](#unable-to-import-module-handler-cannot-import-name-_imaging)
+    - [Avoiding Pillow library issues](#avoiding-pillow-library-issues)
+    - [Unable to import module 'handler': cannot import name '_imaging'](#unable-to-import-module-handler-cannot-import-name-_imaging)
 - [Contributors :heart:](#contributors-heart)
 
 <!-- /TOC -->

@@ -54,6 +54,18 @@ const project = new awscdk.AwsCdkTypeScriptApp({
       uses: 'aws-actions/setup-sam@v2',
     },
   ],
+  versionrcOptions: {
+    "types": [
+      {"type": "feat", "hidden": true},
+      {"type": "fix", "hidden": true},
+      {"type": "chore", "hidden": true},
+      {"type": "docs", "hidden": true},
+      {"type": "style", "hidden": true},
+      {"type": "refactor", "hidden": true},
+      {"type": "perf", "hidden": true},
+      {"type": "test", "hidden": true}
+  ]
+  },
 
   buildWorkflow: true,
   package: false,

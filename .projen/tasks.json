@@ -32,7 +32,8 @@
         "CHANGELOG": "dist/changelog.md",
         "BUMPFILE": "dist/version.txt",
         "RELEASETAG": "dist/releasetag.txt",
-        "RELEASE_TAG_PREFIX": ""
+        "RELEASE_TAG_PREFIX": "",
+        "VERSIONRCOPTIONS": "{\"types\":[{\"type\":\"feat\",\"hidden\":true},{\"type\":\"fix\",\"hidden\":true},{\"type\":\"chore\",\"hidden\":true},{\"type\":\"docs\",\"hidden\":true},{\"type\":\"style\",\"hidden\":true},{\"type\":\"refactor\",\"hidden\":true},{\"type\":\"perf\",\"hidden\":true},{\"type\":\"test\",\"hidden\":true}]}"
       },
       "steps": [
         {
@@ -302,7 +303,8 @@
         "CHANGELOG": "dist/changelog.md",
         "BUMPFILE": "dist/version.txt",
         "RELEASETAG": "dist/releasetag.txt",
-        "RELEASE_TAG_PREFIX": ""
+        "RELEASE_TAG_PREFIX": "",
+        "VERSIONRCOPTIONS": "{\"types\":[{\"type\":\"feat\",\"hidden\":true},{\"type\":\"fix\",\"hidden\":true},{\"type\":\"chore\",\"hidden\":true},{\"type\":\"docs\",\"hidden\":true},{\"type\":\"style\",\"hidden\":true},{\"type\":\"refactor\",\"hidden\":true},{\"type\":\"perf\",\"hidden\":true},{\"type\":\"test\",\"hidden\":true}]}"
       },
       "steps": [
         {
