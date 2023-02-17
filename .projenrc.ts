@@ -172,7 +172,7 @@ project.addTask('upgrade:ci:py', {
   ],
 });
 project.release?.addJobs({
-  'upload release artifact': {
+  'upload_release_artifact': {
     runsOn: ['ubuntu-latest'],
     permissions: { contents: JobPermission.WRITE },
     needs: ['release', 'release_github'],
