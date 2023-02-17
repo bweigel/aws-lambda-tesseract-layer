@@ -1,6 +1,7 @@
 import { exec } from 'child_process';
 import { awscdk, Component, github } from 'projen';
 import { NodeProject, TrailingComma, UpgradeDependenciesSchedule } from 'projen/lib/javascript';
+import { ReleaseTrigger } from 'projen/lib/release';
 
 const project = new awscdk.AwsCdkTypeScriptApp({
   cdkVersion: '2.63.2',
@@ -9,7 +10,6 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   description: 'A layer for AWS Lambda containing the tesseract C libraries and tesseract executable. ',
   projenrcTs: true,
   srcdir: 'continous-integration',
-
   // Use built-in dep upgrades
   dependabot: false,
   gitignore: ['layer', '.serverless', '.mypy_cache', '*.zip', '**/*test-output.txt'],
@@ -28,6 +28,8 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     //postinstall: 'npm ci --prefix example/cdk && npm ci --prefix example/serverless',
     'post-upgrade': 'npx projen upgrade:ci:py',
   },
+  release: true,
+  releaseTrigger: ReleaseTrigger.scheduled({ schedule: '0 17 * * *' }),
   githubOptions: {
     mergify: true,
     projenCredentials: github.GithubCredentials.fromApp(),
@@ -54,10 +56,6 @@ const project = new awscdk.AwsCdkTypeScriptApp({
 
   buildWorkflow: true,
   package: false,
-  postBuildSteps: [
-    { name: 'test-integration-sam-local', run: 'npx projen test:integration' },
-    { name: 'bundle', run: 'npx projen bundle:binary' },
-  ],
   eslint: true,
   prettier: false,
   eslintOptions: {
@@ -118,7 +116,7 @@ project.addTask(`test:integration:node16`, {
     },
   ],
 });
-project.addTask(`test:integration`, {
+const testIntegration = project.addTask(`test:integration`, {
   steps: [
     {
       spawn: `test:integration:py38`,
@@ -128,7 +126,7 @@ project.addTask(`test:integration`, {
     },
   ],
 });
-project.addTask(`bundle:binary`, {
+const bundle = project.addTask(`bundle:binary`, {
   steps: [
     {
       spawn: `synth:silent`,
@@ -141,6 +139,8 @@ project.addTask(`bundle:binary`, {
     },
   ],
 });
+project.packageTask.prependSpawn(testIntegration);
+project.packageTask.prependSpawn(bundle);
 project.packageTask.prependExec(`mkdir -p ./dist`);
 project.packageTask.prependExec(`rm -rf ./dist`);
 project.packageTask.exec(`zip -r ../../dist/tesseract-al2-x86.zip .`, { cwd: './ready-to-use/amazonlinux-2' });

@@ -3,6 +3,7 @@
   "description": "A layer for AWS Lambda containing the tesseract C libraries and tesseract executable. ",
   "scripts": {
     "build": "npx projen build",
+    "bump": "npx projen bump",
     "bundle": "npx projen bundle",
     "bundle:binary": "npx projen bundle:binary",
     "clobber": "npx projen clobber",
@@ -17,6 +18,7 @@
     "post-compile": "npx projen post-compile",
     "post-upgrade": "npx projen post-upgrade",
     "pre-compile": "npx projen pre-compile",
+    "release": "npx projen release",
     "synth": "npx projen synth",
     "synth:silent": "npx projen synth:silent",
     "test": "npx projen test",
@@ -24,6 +26,7 @@
     "test:integration:node16": "npx projen test:integration:node16",
     "test:integration:py38": "npx projen test:integration:py38",
     "test:watch": "npx projen test:watch",
+    "unbump": "npx projen unbump",
     "upgrade": "npx projen upgrade",
     "upgrade:ci:py": "npx projen upgrade:ci:py",
     "watch": "npx projen watch",
@@ -47,6 +50,7 @@
     "npm-check-updates": "^16",
     "prettier": "^2.8.4",
     "projen": "^0.67.58",
+    "standard-version": "^9",
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.5"
