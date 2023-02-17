@@ -26,4 +26,5 @@ jobs:
             fix
             chore
             build
+            docs
           requireScope: false

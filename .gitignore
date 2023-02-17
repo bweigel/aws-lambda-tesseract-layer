@@ -49,7 +49,7 @@ junit.xml
 !/continous-integration/
 /lib
 /dist/
-!/.eslintrc.json
+!/.eslintrc.yml
 /assets/
 !/cdk.json
 /cdk.out/

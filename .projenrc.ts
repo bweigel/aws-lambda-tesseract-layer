@@ -32,15 +32,20 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     mergify: true,
     projenCredentials: github.GithubCredentials.fromApp(),
     pullRequestLintOptions: {
-      semanticTitleOptions: { types: ['feat', 'fix', 'chore', 'build'] },
+      semanticTitleOptions: { types: ['feat', 'fix', 'chore', 'build', 'docs'] },
     },
   },
   workflowBootstrapSteps: [
     {
       uses: 'actions/setup-python@v4',
       with: {
-        'python-version': '3.10',
+        'python-version': '3.8',
+        cache: 'pipenv',
       },
+    },
+    {
+      name: 'Install pipenv',
+      run: 'curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python',
     },
     {
       uses: 'aws-actions/setup-sam@v2',
@@ -58,6 +63,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   eslintOptions: {
     dirs: ['continous-integration', 'example', 'layer'],
     prettier: true,
+    yaml: true,
     ignorePatterns: ['**/node_modules/', '*.d.ts', 'build', 'cdk.out', '**/__snapshots__', 'example'],
   },
   docgen: false,
