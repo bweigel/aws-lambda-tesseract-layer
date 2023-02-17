@@ -30,7 +30,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     'post-upgrade': 'npx projen upgrade:ci:py',
   },
   release: true,
-  releaseTrigger: ReleaseTrigger.scheduled({ schedule: '0 0 * * 0' }),
+  releaseTrigger: ReleaseTrigger.scheduled({ schedule: '0 0 1 1 *' }),
   githubOptions: {
     mergify: true,
     projenCredentials: github.GithubCredentials.fromApp(),
