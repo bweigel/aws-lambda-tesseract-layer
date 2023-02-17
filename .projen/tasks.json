@@ -160,9 +160,6 @@
       "description": "Creates the distribution package",
       "steps": [
         {
-          "exec": "rm -rf ./dist"
-        },
-        {
           "exec": "mkdir -p ./dist"
         },
         {

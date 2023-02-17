@@ -30,7 +30,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     'post-upgrade': 'npx projen upgrade:ci:py',
   },
   release: true,
-  releaseTrigger: ReleaseTrigger.scheduled({ schedule: '0 17 * * *' }),
+  releaseTrigger: ReleaseTrigger.scheduled({ schedule: '0 0 * * 0' }),
   githubOptions: {
     mergify: true,
     projenCredentials: github.GithubCredentials.fromApp(),
@@ -155,7 +155,6 @@ const bundle = project.addTask(`bundle:binary`, {
 project.packageTask.prependSpawn(testIntegration);
 project.packageTask.prependSpawn(bundle);
 project.packageTask.prependExec(`mkdir -p ./dist`);
-project.packageTask.prependExec(`rm -rf ./dist`);
 project.packageTask.exec(`zip -r ../../dist/tesseract-al2-x86.zip .`, { cwd: './ready-to-use/amazonlinux-2' });
 project.addTask('upgrade:ci:py', {
   steps: [
@@ -172,7 +171,7 @@ project.addTask('upgrade:ci:py', {
   ],
 });
 project.release?.addJobs({
-  'upload_release_artifact': {
+  upload_release_artifact: {
     runsOn: ['ubuntu-latest'],
     permissions: { contents: JobPermission.WRITE },
     needs: ['release', 'release_github'],
