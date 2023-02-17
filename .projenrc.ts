@@ -1,5 +1,6 @@
 import { exec } from 'child_process';
 import { awscdk, Component, github } from 'projen';
+import { JobPermission } from 'projen/lib/github/workflows-model';
 import { NodeProject, TrailingComma, UpgradeDependenciesSchedule } from 'projen/lib/javascript';
 import { ReleaseTrigger } from 'projen/lib/release';
 
@@ -158,6 +159,44 @@ project.addTask('upgrade:ci:py', {
     },
   ],
 });
+project.release?.addJobs({
+  'upload release artifact': {
+    runsOn: ['ubuntu-latest'],
+    permissions: { contents: JobPermission.WRITE },
+    needs: ['release', 'release_github'],
+    if: 'needs.release.outputs.latest_commit == github.sha',
+    steps: [
+      {
+        uses: 'actions/setup-node@v3',
+        with: {
+          'node-version': '14.x'
+        }
+      },
+      {
+        name: 'Download build artifacts',
+        uses: 'actions/download-artifact@v3',
+        with: {
+          name: 'build-artifact',
+          path: 'dist'
+        }
+      },
+      {
+        name: 'Restore build artifact permissions',
+        run: 'cd dist && setfacl --restore=permissions-backup.acl',
+        continueOnError: true
+      },
+      {
+        name: 'Upload Release Artifacts',
+        env: {
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}',
+          GITHUB_REPOSITORY: '${{ github.repository }}',
+          GITHUB_REF: '${{ github.ref }}',
+        },
+        run: 'errout=$(mktemp); gh release upload $(cat dist/releasetag.txt) --clobber -R $GITHUB_REPOSITORY dist/tesseract-al2-x86.zip 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi'
+      }
+    ]
+  }
+})
 project.eslint?.addRules({
   'prettier/prettier': ['error', { singleQuote: true, printWidth: 140, trailingComma: TrailingComma.ALL }],
 });

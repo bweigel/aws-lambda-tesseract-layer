@@ -72,3 +72,29 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_REF: ${{ github.ref }}
         run: errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_REF 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi
+  upload release artifact:
+    needs:
+      - release
+      - release_github
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    if: needs.release.outputs.latest_commit == github.sha
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifact
+          path: dist
+      - name: Restore build artifact permissions
+        run: cd dist && setfacl --restore=permissions-backup.acl
+        continue-on-error: true
+      - name: Upload Release Artifacts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REF: ${{ github.ref }}
+        run: errout=$(mktemp); gh release upload $(cat dist/releasetag.txt) --clobber -R $GITHUB_REPOSITORY dist/tesseract-al2-x86.zip 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi
