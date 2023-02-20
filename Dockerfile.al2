@@ -18,7 +18,7 @@ ARG COMPILER_OPTIONS='CXXFLAGS=-mavx2'
 RUN yum makecache fast; yum clean all && yum -y update && yum -y upgrade; yum clean all && \
     yum install -y yum-plugin-ovl; yum clean all && yum -y groupinstall "Development Tools"; yum clean all
 
-RUN yum -y install gcc gcc-c++ make autoconf aclocal automake libtool \
+RUN yum -y install clang gcc-c++ make autoconf aclocal automake libtool \
     libjpeg-devel libpng-devel libtiff-devel zlib-devel \
     libzip-devel freetype-devel lcms2-devel libwebp-devel \
     libicu-devel tcl-devel tk-devel pango-devel cairo-devel; yum clean all
