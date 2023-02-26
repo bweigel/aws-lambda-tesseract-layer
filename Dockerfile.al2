@@ -18,14 +18,15 @@ ARG COMPILER_OPTIONS='CXXFLAGS=-O3 -ffast-math -mavx2'
 RUN yum makecache fast; yum clean all && yum -y update && yum -y upgrade; yum clean all && \
     yum install -y yum-plugin-ovl; yum clean all && yum -y groupinstall "Development Tools"; yum clean all
 
-RUN yum -y install clang gcc-c++ make autoconf aclocal automake libtool \
+RUN yum -y install clang gcc-c++ make autoconf aclocal automake libtool ninja-build \
     libjpeg-devel libpng-devel libtiff-devel zlib-devel \
     libzip-devel freetype-devel lcms2-devel libwebp-devel \
     libicu-devel tcl-devel tk-devel pango-devel cairo-devel; yum clean all
 
 WORKDIR ${TMP_BUILD}/leptonica-build
 RUN curl -L https://github.com/DanBloomberg/leptonica/releases/download/${LEPTONICA_VERSION}/leptonica-${LEPTONICA_VERSION}.tar.gz | tar xz && cd ${TMP_BUILD}/leptonica-build/leptonica-${LEPTONICA_VERSION} && \
-    ./configure --prefix=${LEPTONICA} && make && make install && cp -r ./src/.libs /opt/liblept
+    ./configure --prefix=${LEPTONICA} '--with-pic' '--disable-programs' 'CXX=g++-10' 'CFLAGS=-D DEFAULT_SEVERITY=L_SEVERITY_ERROR -g0 -O3' && \
+     make && make install && cp -r ./src/.libs /opt/liblept
 
 RUN echo "/opt/leptonica/lib" > /etc/ld.so.conf.d/leptonica.conf && /usr/sbin/ldconfig
 
@@ -36,14 +37,16 @@ RUN curl https://ftp.gnu.org/gnu/autoconf-archive/autoconf-archive-${AUTOCONF_AR
 WORKDIR ${TMP_BUILD}/tesseract-build
 RUN curl -L https://github.com/tesseract-ocr/tesseract/archive/${TESSERACT_VERSION}.tar.gz | tar xz && \
     cd tesseract-${TESSERACT_VERSION} && ./autogen.sh  && PKG_CONFIG_PATH=/opt/leptonica/lib/pkgconfig LIBLEPT_HEADERSDIR=/opt/leptonica/include \
-    ./configure --prefix=${TESSERACT} --disable-doc --without-archive --without-curl --disable-legacy --disable-graphics \
-     --with-extra-includes=/opt/leptonica/include --with-extra-libraries=/opt/leptonica/lib ${COMPILER_OPTIONS}  && make && make install
+    ./configure --prefix=${TESSERACT} '--with-pic' '--disable-legacy' '--disable-graphics' '--without-curl' '--disable-doc' 'CXXFLAGS=-DTESS_EXPORTS -g0 -O3 -ffast-math -mavx2' '--with-extra-includes=/opt/leptonica/include' '--with-extra-libraries=/opt/leptonica/lib'  && \
+     make && make install
 
 WORKDIR /opt
 RUN mkdir -p ${DIST}/lib && mkdir -p ${DIST}/bin && \
     cp ${TESSERACT}/bin/tesseract ${DIST}/bin/ && \
     cp ${TESSERACT}/lib/libtesseract.so.5  ${DIST}/lib/ && \
-    cp ${LEPTONICA}/lib/libleptonica.so.6.0.0 ${DIST}/lib/libleptonica.so.6 && \
+    #cp ${TESSERACT}/lib/libtesseract.la  ${DIST}/lib/ && \
+    cp ${LEPTONICA}/lib/libleptonica.so.6 ${DIST}/lib/ && \
+    #cp ${LEPTONICA}/lib/libleptonica.la ${DIST}/lib/ && \
     cp /usr/lib64/libgomp.so.1 ${DIST}/lib/ && \
     cp /usr/lib64/libwebp.so.4 ${DIST}/lib/ && \
     cp /usr/lib64/libpng15.so.15 ${DIST}/lib/ && \
