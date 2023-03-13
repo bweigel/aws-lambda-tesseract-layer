@@ -13,7 +13,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   srcdir: 'continous-integration',
   // Use built-in dep upgrades
   dependabot: false,
-  gitignore: ['layer', '.serverless', '.mypy_cache', '*.zip', '**/*test-output.txt'],
+  gitignore: ['layer', '.serverless', '.mypy_cache', '*.zip', '**/*test-output.txt', 'cdk.out/'],
   autoApproveUpgrades: false,
   depsUpgrade: true,
   depsUpgradeOptions: {
@@ -43,7 +43,6 @@ const project = new awscdk.AwsCdkTypeScriptApp({
       uses: 'actions/setup-python@v4',
       with: {
         'python-version': '3.8',
-        cache: 'pipenv',
       },
     },
     {

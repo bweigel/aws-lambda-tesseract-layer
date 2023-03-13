@@ -35,6 +35,7 @@ layer
 .mypy_cache
 *.zip
 **/*test-output.txt
+cdk.out/
 !/.projenrc.js
 /test-reports/
 junit.xml
