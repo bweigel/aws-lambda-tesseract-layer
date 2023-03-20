@@ -2,10 +2,8 @@
   "name": "node-lambda",
   "scripts": {
     "build": "npx projen build",
-    "clobber": "npx projen clobber",
     "compile": "npx projen compile",
     "default": "npx projen default",
-    "eject": "npx projen eject",
     "package": "npx projen package",
     "post-compile": "npx projen post-compile",
     "post-upgrade": "npx projen post-upgrade",
