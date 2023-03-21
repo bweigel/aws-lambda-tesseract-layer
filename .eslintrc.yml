@@ -49,7 +49,6 @@ rules:
     - devDependencies:
         - "**/test/**"
         - "**/build-tools/**"
-        - "**/projenrc/**"
         - .projenrc.ts
         - projenrc/**/*.ts
       optionalDependencies: false
