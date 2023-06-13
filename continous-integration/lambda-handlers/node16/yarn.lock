@@ -2365,10 +2365,10 @@ jest-haste-map@^29.4.1:
   optionalDependencies:
     fsevents "^2.3.2"
 
-jest-junit@^13:
-  version "13.2.0"
-  resolved "https://registry.yarnpkg.com/jest-junit/-/jest-junit-13.2.0.tgz#66eeb86429aafac8c1745a70f44ace185aacb943"
-  integrity sha512-B0XNlotl1rdsvFZkFfoa19mc634+rrd8E4Sskb92Bb8MmSXeWV9XJGUyctunZS1W410uAxcyYuPUGVnbcOH8cg==
+jest-junit@^15:
+  version "15.0.0"
+  resolved "https://registry.yarnpkg.com/jest-junit/-/jest-junit-15.0.0.tgz#a47544ab42e9f8fe7ada56306c218e09e52bd690"
+  integrity sha512-Z5sVX0Ag3HZdMUnD5DFlG+1gciIFSy7yIVPhOdGUi8YJaI9iLvvBb530gtQL2CHmv0JJeiwRZenr0VrSR7frvg==
   dependencies:
     mkdirp "^1.0.4"
     strip-ansi "^6.0.1"
@@ -3821,7 +3821,7 @@ tar@^6.1.11, tar@^6.1.2:
     mkdirp "^1.0.3"
     yallist "^4.0.0"
 
-tesseractocr@*:
+tesseractocr@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/tesseractocr/-/tesseractocr-2.0.3.tgz#5809bbffb7dc2541f04bea46573516d047dfd002"
   integrity sha512-uR0bNUyTdJctYMSkfIGyG54CgCntFUirqZ/sIwisqvBK0zJX5LGOIt6FkxdGnIIT8kmWlT3KmL9mHXiI4OYgcw==
