@@ -16,12 +16,12 @@
   "devDependencies": {
     "esbuild": "^0.17.5",
     "jest": "^29.4.1",
-    "jest-junit": "^13",
+    "jest-junit": "^15",
     "npm-check-updates": "^16",
     "projen": "^0.67.34"
   },
   "dependencies": {
-    "tesseractocr": "*"
+    "tesseractocr": "^2.0.3"
   },
   "main": "lib/index.js",
   "license": "UNLICENSED",
