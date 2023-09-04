@@ -107,7 +107,7 @@
           "exec": "yarn upgrade npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --upgrade --target=minor --filter=esbuild,jest,jest-junit,npm-check-updates,projen,tesseractocr"
+          "exec": "npm-check-updates --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=esbuild,jest,jest-junit,npm-check-updates,projen,tesseractocr"
         },
         {
           "exec": "yarn install --check-files"
