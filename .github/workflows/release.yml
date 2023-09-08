@@ -81,8 +81,6 @@ jobs:
     if: needs.release.outputs.latest_commit == github.sha
     steps:
       - uses: actions/setup-node@v3
-        with:
-          node-version: 14.x
       - name: Download build artifacts
         uses: actions/download-artifact@v3
         with:

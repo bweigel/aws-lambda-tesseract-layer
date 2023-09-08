@@ -5,7 +5,7 @@ import { NodeProject, TrailingComma, UpgradeDependenciesSchedule } from 'projen/
 import { ReleaseTrigger } from 'projen/lib/release';
 
 const project = new awscdk.AwsCdkTypeScriptApp({
-  cdkVersion: '2.63.2',
+  cdkVersion: '2.95.0',
   defaultReleaseBranch: 'master',
   name: 'aws-lambda-tesseract-layer',
   description: 'A layer for AWS Lambda containing the tesseract C libraries and tesseract executable. ',
@@ -178,9 +178,6 @@ project.release?.addJobs({
     steps: [
       {
         uses: 'actions/setup-node@v3',
-        with: {
-          'node-version': '14.x',
-        },
       },
       {
         name: 'Download build artifacts',
