@@ -21,10 +21,10 @@ const al2Layer = new lambda.LayerVersion(stack, 'al2-layer', {
 });
 stack.renameLogicalId(stack.getLogicalId(al2Layer.node.defaultChild as CfnLayerVersion), 'al2layer');
 
-new lambda.Function(stack, 'python3.8', {
-  code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda-handlers/py38'), {
+new lambda.Function(stack, 'python', {
+  code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda-handlers/python'), {
     bundling: {
-      image: DockerImage.fromRegistry('public.ecr.aws/sam/build-python3.8:latest'),
+      image: DockerImage.fromRegistry('public.ecr.aws/sam/build-python3.10:latest'),
       command: [
         '/bin/bash',
         '-c',
@@ -32,15 +32,15 @@ new lambda.Function(stack, 'python3.8', {
       ],
     },
   }),
-  runtime: Runtime.PYTHON_3_8,
+  runtime: Runtime.PYTHON_3_10,
   layers: [al2Layer],
-  functionName: `py38`,
+  functionName: `python`,
   memorySize: 512,
   timeout: Duration.seconds(30),
   handler: 'handler.main',
 });
 
-new nodelambda.NodejsFunction(stack, 'node16', {
+new nodelambda.NodejsFunction(stack, 'node', {
   bundling: {
     nodeModules: ['tesseractocr'],
     commandHooks: {
@@ -55,12 +55,12 @@ new nodelambda.NodejsFunction(stack, 'node16', {
       },
     },
   },
-  depsLockFilePath: path.resolve(__dirname, 'lambda-handlers/node16/yarn.lock'),
+  depsLockFilePath: path.resolve(__dirname, 'lambda-handlers/node/yarn.lock'),
 
-  runtime: Runtime.NODEJS_16_X,
-  entry: path.resolve(__dirname, 'lambda-handlers/node16/index.js'),
+  runtime: Runtime.NODEJS_18_X,
+  entry: path.resolve(__dirname, 'lambda-handlers/node/index.js'),
   layers: [al2Layer],
-  functionName: `node16`,
+  functionName: `node`,
   memorySize: 512,
   timeout: Duration.seconds(30),
   handler: 'handler',

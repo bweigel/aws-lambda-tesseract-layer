@@ -108,33 +108,33 @@ class BinaryPatchComponent extends Component {
 
 new BinaryPatchComponent(project);
 
-project.addTask(`test:integration:py38`, {
+project.addTask(`test:integration:python`, {
   steps: [
     {
       spawn: `synth:silent`,
     },
     {
-      exec: `sam local invoke -t cdk.out/tesseract-lambda-ci.template.json py38 --no-event > py38-test-output.txt && cat py38-test-output.txt | grep -Eiv \"(fail|error|exception)\"`,
+      exec: `sam local invoke -t cdk.out/tesseract-lambda-ci.template.json py --no-event > py-test-output.txt && cat py-test-output.txt | grep -Eiv \"(fail|error|exception)\"`,
     },
   ],
 });
-project.addTask(`test:integration:node16`, {
+project.addTask(`test:integration:node`, {
   steps: [
     {
       spawn: `synth:silent`,
     },
     {
-      exec: `sam local invoke -t cdk.out/tesseract-lambda-ci.template.json node16 --no-event > node16-test-output.txt && cat node16-test-output.txt | grep -Eiv \"(fail|error|exception)\"`,
+      exec: `sam local invoke -t cdk.out/tesseract-lambda-ci.template.json node --no-event > node-test-output.txt && cat node-test-output.txt | grep -Eiv \"(fail|error|exception)\"`,
     },
   ],
 });
 const testIntegration = project.addTask(`test:integration`, {
   steps: [
     {
-      spawn: `test:integration:py38`,
+      spawn: `test:integration:python`,
     },
     {
-      spawn: `test:integration:node16`,
+      spawn: `test:integration:node`,
     },
   ],
 });
@@ -159,13 +159,13 @@ project.addTask('upgrade:ci:py', {
   steps: [
     {
       exec: 'pipenv lock && pipenv requirements > requirements.txt',
-      cwd: 'continous-integration/lambda-handlers/py38',
+      cwd: 'continous-integration/lambda-handlers/py',
     },
     {
-      exec: 'cp continous-integration/lambda-handlers/py38/requirements.txt example/cdk/src/lambda-handlers/requirements.txt',
+      exec: 'cp continous-integration/lambda-handlers/py/requirements.txt example/cdk/src/lambda-handlers/requirements.txt',
     },
     {
-      exec: 'cp continous-integration/lambda-handlers/py38/requirements.txt example/serverless/requirements.txt',
+      exec: 'cp continous-integration/lambda-handlers/py/requirements.txt example/serverless/requirements.txt',
     },
   ],
 });
@@ -223,7 +223,7 @@ new NodeProject({
   name: 'node-lambda',
   defaultReleaseBranch: 'master',
   parent: project,
-  outdir: 'continous-integration/lambda-handlers/node16',
+  outdir: 'continous-integration/lambda-handlers/node',
   deps: ['tesseractocr'],
   devDeps: ['esbuild'],
   depsUpgrade: true,
