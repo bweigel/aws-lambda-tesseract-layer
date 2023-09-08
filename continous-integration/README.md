@@ -15,10 +15,10 @@ Commands to reproduce:
 ```bash
 npm ci
 npx cdk --app 'npx ts-node index.ts' synth
-## run integration test using Python 3.8
-npx npm run test:integration:py38
-## run integration test using NodeJs 16
-npx npm run test:integration:node16
+## run integration test using Python 3.10
+npx npm run test:integration:python
+## run integration test using NodeJs 18
+npx npm run test:integration:node
 ```
 
 ## Bundling
