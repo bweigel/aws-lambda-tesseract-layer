@@ -53,7 +53,7 @@ npx cdk deploy
 ```
 # Ready-to-use binaries
 
-For ready to use binaries that you can put in your layer see [`ready-to-use`](./ready-to-use).
+For compiled, ready to use binaries that you can put in your layer see [`ready-to-use`](./ready-to-use), or check out the [latest release](https://github.com/bweigel/aws-lambda-tesseract-layer/releases/latest).
 
 See [examples](./example) for some ready-to-use examples.
 
