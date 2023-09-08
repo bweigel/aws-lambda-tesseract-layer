@@ -114,7 +114,7 @@ project.addTask(`test:integration:python`, {
       spawn: `synth:silent`,
     },
     {
-      exec: `sam local invoke -t cdk.out/tesseract-lambda-ci.template.json py --no-event > py-test-output.txt && cat py-test-output.txt | grep -Eiv \"(fail|error|exception)\"`,
+      exec: `sam local invoke -t cdk.out/tesseract-lambda-ci.template.json python --no-event > py-test-output.txt && cat py-test-output.txt | grep -Eiv \"(fail|error|exception)\"`,
     },
   ],
 });
