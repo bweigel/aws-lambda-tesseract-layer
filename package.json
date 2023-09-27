@@ -28,7 +28,10 @@
     "test:watch": "npx projen test:watch",
     "unbump": "npx projen unbump",
     "upgrade": "npx projen upgrade",
+    "upgrade:ci:node": "npx projen upgrade:ci:node",
     "upgrade:ci:py": "npx projen upgrade:ci:py",
+    "upgrade:example": "npx projen upgrade:example",
+    "upgrade:subprojects": "npx projen upgrade:subprojects",
     "watch": "npx projen watch",
     "projen": "npx projen"
   },

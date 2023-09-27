@@ -29,7 +29,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   },
   scripts: {
     //postinstall: 'npm ci --prefix example/cdk && npm ci --prefix example/serverless',
-    'post-upgrade': 'npx projen upgrade:ci:py',
+    'post-upgrade': 'npx projen upgrade:subprojects',
   },
   release: true,
   releaseTrigger: ReleaseTrigger.scheduled({ schedule: '0 0 1 1 *' }),
@@ -232,4 +232,23 @@ new NodeProject({
   licensed: false,
 });
 
+project.addTask('upgrade:ci:node', {
+  steps: [
+    {
+      spawn: 'upgrade',
+      cwd: 'continous-integration/lambda-handlers/node',
+    },
+  ],
+});
+project.addTask('upgrade:example', {
+  steps: [
+    {
+      spawn: 'upgrade',
+      cwd: 'example/cdk',
+    },
+  ],
+});
+project.addTask('upgrade:subprojects', {
+  steps: [{ spawn: 'upgrade:ci:node' }, { spawn: 'upgrade:ci:py' }, { spawn: 'upgrade:ci:node' }],
+});
 project.synth();
