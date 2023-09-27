@@ -4,9 +4,11 @@ import { JobPermission } from 'projen/lib/github/workflows-model';
 import { NodeProject, TrailingComma, UpgradeDependenciesSchedule } from 'projen/lib/javascript';
 import { ReleaseTrigger } from 'projen/lib/release';
 
+const defaultReleaseBranch = 'main';
+
 const project = new awscdk.AwsCdkTypeScriptApp({
   cdkVersion: '2.95.0',
-  defaultReleaseBranch: 'master',
+  defaultReleaseBranch,
   name: 'aws-lambda-tesseract-layer',
   description: 'A layer for AWS Lambda containing the tesseract C libraries and tesseract executable. ',
   projenrcTs: true,
@@ -213,7 +215,7 @@ project.eslint?.addRules({
 new awscdk.AwsCdkTypeScriptApp({
   cdkVersion: '2.55.0',
   name: 'aws-lambda-tesseract-layer-example',
-  defaultReleaseBranch: 'master',
+  defaultReleaseBranch,
   parent: project,
   outdir: 'example/cdk',
   depsUpgrade: true,
@@ -221,7 +223,7 @@ new awscdk.AwsCdkTypeScriptApp({
 });
 new NodeProject({
   name: 'node-lambda',
-  defaultReleaseBranch: 'master',
+  defaultReleaseBranch,
   parent: project,
   outdir: 'continous-integration/lambda-handlers/node',
   deps: ['tesseractocr'],
