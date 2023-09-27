@@ -159,13 +159,13 @@ project.addTask('upgrade:ci:py', {
   steps: [
     {
       exec: 'pipenv lock && pipenv requirements > requirements.txt',
-      cwd: 'continous-integration/lambda-handlers/py',
+      cwd: 'continous-integration/lambda-handlers/python',
     },
     {
-      exec: 'cp continous-integration/lambda-handlers/py/requirements.txt example/cdk/src/lambda-handlers/requirements.txt',
+      exec: 'cp continous-integration/lambda-handlers/python/requirements.txt example/cdk/src/lambda-handlers/requirements.txt',
     },
     {
-      exec: 'cp continous-integration/lambda-handlers/py/requirements.txt example/serverless/requirements.txt',
+      exec: 'cp continous-integration/lambda-handlers/python/requirements.txt example/serverless/requirements.txt',
     },
   ],
 });
