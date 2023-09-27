@@ -397,7 +397,7 @@
           "spawn": "upgrade:ci:py"
         },
         {
-          "spawn": "upgrade:ci:node"
+          "spawn": "upgrade:example"
         }
       ]
     },

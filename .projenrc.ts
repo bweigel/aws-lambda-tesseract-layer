@@ -249,6 +249,6 @@ project.addTask('upgrade:example', {
   ],
 });
 project.addTask('upgrade:subprojects', {
-  steps: [{ spawn: 'upgrade:ci:node' }, { spawn: 'upgrade:ci:py' }, { spawn: 'upgrade:ci:node' }],
+  steps: [{ spawn: 'upgrade:ci:node' }, { spawn: 'upgrade:ci:py' }, { spawn: 'upgrade:example' }],
 });
 project.synth();
