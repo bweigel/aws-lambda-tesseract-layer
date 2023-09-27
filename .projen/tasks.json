@@ -205,7 +205,7 @@
       "name": "post-upgrade",
       "steps": [
         {
-          "exec": "npx projen upgrade:ci:py"
+          "exec": "npx projen upgrade:subprojects"
         }
       ]
     },
@@ -354,6 +354,15 @@
         }
       ]
     },
+    "upgrade:ci:node": {
+      "name": "upgrade:ci:node",
+      "steps": [
+        {
+          "spawn": "upgrade",
+          "cwd": "continous-integration/lambda-handlers/node"
+        }
+      ]
+    },
     "upgrade:ci:py": {
       "name": "upgrade:ci:py",
       "steps": [
@@ -366,6 +375,29 @@
         },
         {
           "exec": "cp continous-integration/lambda-handlers/python/requirements.txt example/serverless/requirements.txt"
+        }
+      ]
+    },
+    "upgrade:example": {
+      "name": "upgrade:example",
+      "steps": [
+        {
+          "spawn": "upgrade",
+          "cwd": "example/cdk"
+        }
+      ]
+    },
+    "upgrade:subprojects": {
+      "name": "upgrade:subprojects",
+      "steps": [
+        {
+          "spawn": "upgrade:ci:node"
+        },
+        {
+          "spawn": "upgrade:ci:py"
+        },
+        {
+          "spawn": "upgrade:ci:node"
         }
       ]
     },
