@@ -6,4 +6,4 @@ packaging==23.1 ; python_version >= '3.7'
 pillow==10.0.0
 pytesseract==0.3.10
 requests==2.31.0
-urllib3==2.0.4 ; python_version >= '3.7'
+urllib3==2.0.6 ; python_version >= '3.7'
