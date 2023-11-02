@@ -232,23 +232,7 @@ new NodeProject({
   licensed: false,
 });
 
-project.addTask('upgrade:ci:node', {
-  steps: [
-    {
-      spawn: 'upgrade',
-      cwd: 'continous-integration/lambda-handlers/node',
-    },
-  ],
-});
-project.addTask('upgrade:example', {
-  steps: [
-    {
-      spawn: 'upgrade',
-      cwd: 'example/cdk',
-    },
-  ],
-});
 project.addTask('upgrade:subprojects', {
-  steps: [{ spawn: 'upgrade:ci:node' }, { spawn: 'upgrade:ci:py' }, { spawn: 'upgrade:example' }],
+  steps: [{ spawn: 'upgrade:ci:py' }],
 });
 project.synth();

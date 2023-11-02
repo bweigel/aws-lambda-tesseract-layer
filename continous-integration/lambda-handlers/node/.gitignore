@@ -32,4 +32,3 @@ jspm_packages/
 /test-reports/
 junit.xml
 /coverage/
-!/.npmrc
