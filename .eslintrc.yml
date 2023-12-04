@@ -7,7 +7,6 @@ root: true
 plugins:
   - "@typescript-eslint"
   - import
-  - prettier
 parser: "@typescript-eslint/parser"
 parserOptions:
   ecmaVersion: 2018
@@ -15,7 +14,6 @@ parserOptions:
   project: ./tsconfig.dev.json
 extends:
   - plugin:import/typescript
-  - prettier
   - plugin:prettier/recommended
 settings:
   import/parsers:
@@ -37,11 +35,6 @@ ignorePatterns:
   - "!.projenrc.ts"
   - "!projenrc/**/*.ts"
 rules:
-  prettier/prettier:
-    - error
-    - singleQuote: true
-      printWidth: 140
-      trailingComma: all
   "@typescript-eslint/no-require-imports":
     - error
   import/no-extraneous-dependencies:
@@ -97,6 +90,11 @@ rules:
         - field
         - constructor
         - method
+  prettier/prettier:
+    - error
+    - singleQuote: true
+      printWidth: 140
+      trailingComma: all
 overrides:
   - files:
       - .projenrc.ts
