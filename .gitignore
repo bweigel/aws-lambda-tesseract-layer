@@ -36,7 +36,6 @@ layer
 *.zip
 **/*test-output.txt
 cdk.out/
-!/.projenrc.js
 /test-reports/
 junit.xml
 /coverage/
@@ -59,3 +58,4 @@ junit.xml
 /cdk.out/
 .cdk.staging/
 .parcel-cache/
+!/.projenrc.ts
