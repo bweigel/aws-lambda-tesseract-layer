@@ -104,7 +104,7 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=constructs,esbuild,jest,jest-junit,projen,tesseractocr"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=esbuild,jest,projen,tesseractocr"
         },
         {
           "exec": "yarn install --check-files"
