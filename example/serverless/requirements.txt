@@ -1,7 +1,7 @@
 -i https://pypi.org/simple
 certifi==2024.2.2; python_version >= '3.6'
 charset-normalizer==3.3.2; python_full_version >= '3.7.0'
-idna==3.6; python_version >= '3.5'
+idna==3.7; python_version >= '3.5'
 packaging==24.0; python_version >= '3.7'
 pillow==10.3.0; python_version >= '3.8'
 pytesseract==0.3.10; python_version >= '3.7'
