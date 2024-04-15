@@ -104,13 +104,13 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=esbuild,jest,projen,tesseractocr"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=esbuild,jest,tesseractocr"
         },
         {
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade constructs esbuild jest jest-junit projen tesseractocr"
+          "exec": "yarn upgrade esbuild jest jest-junit tesseractocr"
         },
         {
           "exec": "npx projen"
