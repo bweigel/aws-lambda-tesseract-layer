@@ -30,7 +30,5 @@
   "include": [
     "continous-integration/**/*.ts"
   ],
-  "exclude": [
-    "cdk.out"
-  ]
+  "exclude": []
 }

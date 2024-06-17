@@ -23,8 +23,12 @@
   },
   "main": "lib/index.js",
   "license": "UNLICENSED",
+  "publishConfig": {
+    "access": "public"
+  },
   "version": "0.0.0",
   "jest": {
+    "coverageProvider": "v8",
     "clearMocks": true,
     "collectCoverage": true,
     "coverageReporters": [
