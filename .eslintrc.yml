@@ -56,7 +56,7 @@ rules:
       alphabetize:
         order: asc
         caseInsensitive: true
-  no-duplicate-imports:
+  import/no-duplicates:
     - error
   no-shadow:
     - off
