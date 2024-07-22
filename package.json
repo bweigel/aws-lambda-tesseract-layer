@@ -39,7 +39,7 @@
     "@typescript-eslint/eslint-plugin": "^7",
     "@typescript-eslint/parser": "^7",
     "aws-cdk": "^2.95.0",
-    "esbuild": "^0.21.5",
+    "esbuild": "^0.23.0",
     "eslint": "^8",
     "eslint-config-prettier": "^8.10.0",
     "eslint-import-resolver-typescript": "^3.6.1",
@@ -48,9 +48,9 @@
     "jest": "^29.7.0",
     "jest-junit": "^15",
     "prettier": "^2.8.8",
-    "projen": "^0.82.8",
+    "projen": "^0.84.6",
     "standard-version": "^9",
-    "ts-jest": "^29.1.5",
+    "ts-jest": "^29.2.3",
     "ts-node": "^10.9.2",
     "typescript": "^4.9.5"
   },
@@ -69,8 +69,10 @@
       "^aws-cdk-lib/.warnings.jsii.js$": "<rootDir>/node_modules/aws-cdk-lib/.warnings.jsii.js"
     },
     "testMatch": [
-      "<rootDir>/continous-integration/**/__tests__/**/*.ts?(x)",
-      "<rootDir>/@(test|continous-integration)/**/*(*.)@(spec|test).ts?(x)"
+      "<rootDir>/@(continous-integration|test)/**/*(*.)@(spec|test).ts?(x)",
+      "<rootDir>/@(continous-integration|test)/**/__tests__/**/*.ts?(x)",
+      "<rootDir>/@(projenrc)/**/*(*.)@(spec|test).ts?(x)",
+      "<rootDir>/@(projenrc)/**/__tests__/**/*.ts?(x)"
     ],
     "clearMocks": true,
     "collectCoverage": true,
