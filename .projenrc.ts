@@ -5,11 +5,11 @@ import { NodeProject, TrailingComma, UpgradeDependenciesSchedule } from 'projen/
 import { ReleaseTrigger } from 'projen/lib/release';
 
 const defaultReleaseBranch = 'main';
-const setupPythonAction = 'actions/setup-python@v5'
-const setupNodeAction = 'actions/setup-node@v4'
-const setupSamAction = 'aws-actions/setup-sam@v2'
-const downloadArtifactAction = 'actions/download-artifact@v4'
-const nodeActionVersion = '18'
+const setupPythonAction = 'actions/setup-python@v5';
+const setupNodeAction = 'actions/setup-node@v4';
+const setupSamAction = 'aws-actions/setup-sam@v2';
+const downloadArtifactAction = 'actions/download-artifact@v4';
+const nodeActionVersion = '18';
 
 const project = new awscdk.AwsCdkTypeScriptApp({
   cdkVersion: '2.95.0',
@@ -187,7 +187,7 @@ project.release?.addJobs({
         uses: setupNodeAction,
         with: {
           'node-version': nodeActionVersion,
-        }
+        },
       },
       {
         name: 'Download build artifacts',
