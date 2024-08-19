@@ -225,12 +225,12 @@
         },
         "pytesseract": {
             "hashes": [
-                "sha256:8f22cc98f765bf13517ead0c70effedb46c153540d25783e04014f28b55a5fc6",
-                "sha256:f1c3a8b0f07fd01a1085d451f5b8315be6eec1d5577a6796d46dc7a62bd4120f"
+                "sha256:4bf5f880c99406f52a3cfc2633e42d9dc67615e69d8a509d74867d3baddb5db9",
+                "sha256:7a99c6c2ac598360693d83a416e36e0b33a67638bb9d77fdcac094a3589d4b34"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.7'",
-            "version": "==0.3.10"
+            "markers": "python_version >= '3.8'",
+            "version": "==0.3.13"
         },
         "requests": {
             "hashes": [
