@@ -33,14 +33,15 @@
         "BUMPFILE": "dist/version.txt",
         "RELEASETAG": "dist/releasetag.txt",
         "RELEASE_TAG_PREFIX": "",
-        "VERSIONRCOPTIONS": "{\"types\":[{\"type\":\"feat\",\"hidden\":true},{\"type\":\"fix\",\"hidden\":true},{\"type\":\"chore\",\"hidden\":true},{\"type\":\"docs\",\"hidden\":true},{\"type\":\"style\",\"hidden\":true},{\"type\":\"refactor\",\"hidden\":true},{\"type\":\"perf\",\"hidden\":true},{\"type\":\"test\",\"hidden\":true}]}"
+        "VERSIONRCOPTIONS": "{\"types\":[{\"type\":\"feat\",\"hidden\":true},{\"type\":\"fix\",\"hidden\":true},{\"type\":\"chore\",\"hidden\":true},{\"type\":\"docs\",\"hidden\":true},{\"type\":\"style\",\"hidden\":true},{\"type\":\"refactor\",\"hidden\":true},{\"type\":\"perf\",\"hidden\":true},{\"type\":\"test\",\"hidden\":true}]}",
+        "BUMP_PACKAGE": "commit-and-tag-version@^12"
       },
       "steps": [
         {
           "builtin": "release/bump-version"
         }
       ],
-      "condition": "! git log --oneline -1 | grep -q \"chore(release):\""
+      "condition": "git log --oneline -1 | grep -qv \"chore(release):\""
     },
     "bundle": {
       "name": "bundle",
@@ -320,7 +321,8 @@
         "BUMPFILE": "dist/version.txt",
         "RELEASETAG": "dist/releasetag.txt",
         "RELEASE_TAG_PREFIX": "",
-        "VERSIONRCOPTIONS": "{\"types\":[{\"type\":\"feat\",\"hidden\":true},{\"type\":\"fix\",\"hidden\":true},{\"type\":\"chore\",\"hidden\":true},{\"type\":\"docs\",\"hidden\":true},{\"type\":\"style\",\"hidden\":true},{\"type\":\"refactor\",\"hidden\":true},{\"type\":\"perf\",\"hidden\":true},{\"type\":\"test\",\"hidden\":true}]}"
+        "VERSIONRCOPTIONS": "{\"types\":[{\"type\":\"feat\",\"hidden\":true},{\"type\":\"fix\",\"hidden\":true},{\"type\":\"chore\",\"hidden\":true},{\"type\":\"docs\",\"hidden\":true},{\"type\":\"style\",\"hidden\":true},{\"type\":\"refactor\",\"hidden\":true},{\"type\":\"perf\",\"hidden\":true},{\"type\":\"test\",\"hidden\":true}]}",
+        "BUMP_PACKAGE": "commit-and-tag-version@^12"
       },
       "steps": [
         {
@@ -342,7 +344,7 @@
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk esbuild eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit prettier projen standard-version ts-jest ts-node typescript aws-cdk-lib constructs"
+          "exec": "yarn upgrade @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk commit-and-tag-version esbuild eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit prettier projen ts-jest ts-node typescript aws-cdk-lib constructs"
         },
         {
           "exec": "npx projen"
