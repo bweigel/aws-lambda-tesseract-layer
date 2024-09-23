@@ -189,6 +189,12 @@
           "spawn": "test:integration"
         },
         {
+          "exec": "mkdir -p dist/js"
+        },
+        {
+          "exec": "npm pack --pack-destination dist/js"
+        },
+        {
           "exec": "zip -r ../../dist/tesseract-al2-x86.zip .",
           "cwd": "./ready-to-use/amazonlinux-2"
         }
