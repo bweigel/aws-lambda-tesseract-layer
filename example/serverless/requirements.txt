@@ -1,5 +1,5 @@
 -i https://pypi.org/simple
-certifi==2024.12.14; python_version >= '3.6'
+certifi==2025.1.31; python_version >= '3.6'
 charset-normalizer==3.4.1; python_version >= '3.7'
 idna==3.10; python_version >= '3.6'
 packaging==24.2; python_version >= '3.8'
