@@ -15,6 +15,7 @@ Tesseract OCR Lambda Layer
 > :warning: **DEPRECATION NOTICE**:
 > - **Amazon Linux 1 (AL1)**: Removed. No longer supported.
 > - **Amazon Linux 2 (AL2)**: **Deprecated**. Will be removed after 6 months. New projects should use Amazon Linux 2023 (AL2023).
+>   - **Note**: AL2 with Tesseract 5.5+ is not supported in CI due to GCC 7.3.1 lacking C++17 filesystem support. Users can build locally with Tesseract 5.4.x or earlier if AL2 is required.
 > - **Recommended**: Use Amazon Linux 2023 (AL2023) for all new projects.
 
 <!-- TOC -->

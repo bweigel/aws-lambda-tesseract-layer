@@ -107,4 +107,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_REF: ${{ github.ref }}
-        run: errout=$(mktemp); gh release upload $(cat dist/releasetag.txt) --clobber -R $GITHUB_REPOSITORY dist/tesseract-al2-x86.zip dist/tesseract-al2023-x86.zip 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi
+        run: errout=$(mktemp); gh release upload $(cat dist/releasetag.txt) --clobber -R $GITHUB_REPOSITORY dist/tesseract-al2023-x86.zip 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi

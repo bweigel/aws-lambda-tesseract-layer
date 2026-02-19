@@ -115,26 +115,27 @@ class BinaryPatchComponent extends Component {
 
 new BinaryPatchComponent(project);
 
-project.addTask(`test:integration:python`, {
-  steps: [
-    {
-      spawn: `synth:silent`,
-    },
-    {
-      exec: `sam local invoke -t cdk.out/tesseract-lambda-ci.template.json python --no-event > py-test-output.txt && cat py-test-output.txt | grep -Eiv \"(fail|error|exception)\"`,
-    },
-  ],
-});
-project.addTask(`test:integration:node`, {
-  steps: [
-    {
-      spawn: `synth:silent`,
-    },
-    {
-      exec: `sam local invoke -t cdk.out/tesseract-lambda-ci.template.json node --no-event > node-test-output.txt && cat node-test-output.txt | grep -Eiv \"(fail|error|exception)\"`,
-    },
-  ],
-});
+// AL2 integration tests temporarily disabled (AL2 deprecated, GCC 7.3.1 incompatible with Tesseract 5.5.2)
+// project.addTask(`test:integration:python`, {
+//   steps: [
+//     {
+//       spawn: `synth:silent`,
+//     },
+//     {
+//       exec: `sam local invoke -t cdk.out/tesseract-lambda-ci.template.json python --no-event > py-test-output.txt && cat py-test-output.txt | grep -Eiv \"(fail|error|exception)\"`,
+//     },
+//   ],
+// });
+// project.addTask(`test:integration:node`, {
+//   steps: [
+//     {
+//       spawn: `synth:silent`,
+//     },
+//     {
+//       exec: `sam local invoke -t cdk.out/tesseract-lambda-ci.template.json node --no-event > node-test-output.txt && cat node-test-output.txt | grep -Eiv \"(fail|error|exception)\"`,
+//     },
+//   ],
+// });
 project.addTask(`test:integration:python312`, {
   steps: [
     {
@@ -167,12 +168,13 @@ project.addTask(`test:integration:al2023`, {
 });
 const testIntegration = project.addTask(`test:integration`, {
   steps: [
-    {
-      spawn: `test:integration:python`,
-    },
-    {
-      spawn: `test:integration:node`,
-    },
+    // AL2 tests disabled (see note about AL2 build issue in continous-integration/main.ts)
+    // {
+    //   spawn: `test:integration:python`,
+    // },
+    // {
+    //   spawn: `test:integration:node`,
+    // },
     {
       spawn: `test:integration:al2023`,
     },
@@ -183,13 +185,14 @@ const bundle = project.addTask(`bundle:binary`, {
     {
       spawn: `synth:silent`,
     },
-    // AL2 bundling
-    {
-      exec: `rm -rf ./ready-to-use/amazonlinux-2/*`,
-    },
-    {
-      exec: `cp -r cdk.out/$(cat cdk.out/tesseract-lambda-ci.template.json | jq -r '.Resources.al2layer.Metadata.\"aws:asset:path\"')/. ./ready-to-use/amazonlinux-2`,
-    },
+    // AL2 bundling disabled (see note about AL2 build issue in continous-integration/main.ts)
+    // AL2 users can build locally with older Tesseract if needed
+    // {
+    //   exec: `rm -rf ./ready-to-use/amazonlinux-2/*`,
+    // },
+    // {
+    //   exec: `cp -r cdk.out/$(cat cdk.out/tesseract-lambda-ci.template.json | jq -r '.Resources.al2layer.Metadata.\"aws:asset:path\"')/. ./ready-to-use/amazonlinux-2`,
+    // },
     // AL2023 bundling
     {
       exec: `mkdir -p ./ready-to-use/amazonlinux-2023`,
@@ -205,7 +208,8 @@ const bundle = project.addTask(`bundle:binary`, {
 project.packageTask.prependSpawn(testIntegration);
 project.packageTask.prependSpawn(bundle);
 project.packageTask.prependExec(`mkdir -p ./dist`);
-project.packageTask.exec(`zip -r ../../dist/tesseract-al2-x86.zip .`, { cwd: './ready-to-use/amazonlinux-2' });
+// AL2 packaging disabled (see note about AL2 build issue in continous-integration/main.ts)
+// project.packageTask.exec(`zip -r ../../dist/tesseract-al2-x86.zip .`, { cwd: './ready-to-use/amazonlinux-2' });
 project.packageTask.exec(`zip -r ../../dist/tesseract-al2023-x86.zip .`, { cwd: './ready-to-use/amazonlinux-2023' });
 project.addTask('upgrade:ci:py', {
   steps: [
@@ -254,7 +258,7 @@ project.release?.addJobs({
           GITHUB_REPOSITORY: '${{ github.repository }}',
           GITHUB_REF: '${{ github.ref }}',
         },
-        run: 'errout=$(mktemp); gh release upload $(cat dist/releasetag.txt) --clobber -R $GITHUB_REPOSITORY dist/tesseract-al2-x86.zip dist/tesseract-al2023-x86.zip 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi',
+        run: 'errout=$(mktemp); gh release upload $(cat dist/releasetag.txt) --clobber -R $GITHUB_REPOSITORY dist/tesseract-al2023-x86.zip 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi',
       },
     ],
   },
