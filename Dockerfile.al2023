@@ -18,7 +18,7 @@ ARG COMPILER_FLAGS="-mavx2 -std=c++17"
 RUN dnf makecache; dnf clean all && dnf -y update && dnf -y upgrade; dnf clean all && \
     dnf -y groupinstall "Development Tools"; dnf clean all
 
-RUN dnf -y install clang gcc-c++ make autoconf automake libtool \
+RUN dnf -y install clang gcc-c++ make autoconf automake libtool xz \
     libjpeg-devel libpng-devel libtiff-devel zlib-devel \
     libzip-devel freetype-devel lcms2-devel libwebp-devel \
     libicu-devel tcl-devel tk-devel pango-devel cairo-devel; dnf clean all
