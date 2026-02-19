@@ -20,7 +20,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   srcdir: 'continous-integration',
   // Use built-in dep upgrades
   dependabot: false,
-  gitignore: ['layer', '.serverless', '.mypy_cache', '*.zip', '**/*test-output.txt', 'cdk.out/'],
+  gitignore: ['layer', '.serverless', '.mypy_cache', '*.zip', '**/*test-output.txt', 'py312-test-output.txt', 'node20-test-output.txt', 'cdk.out/'],
   autoApproveUpgrades: false,
   depsUpgrade: true,
   depsUpgradeOptions: {
@@ -135,6 +135,36 @@ project.addTask(`test:integration:node`, {
     },
   ],
 });
+project.addTask(`test:integration:python312`, {
+  steps: [
+    {
+      spawn: `synth:silent`,
+    },
+    {
+      exec: `sam local invoke -t cdk.out/tesseract-lambda-ci.template.json python312 --no-event > py312-test-output.txt && cat py312-test-output.txt | grep -Eiv \"(fail|error|exception)\"`,
+    },
+  ],
+});
+project.addTask(`test:integration:node20`, {
+  steps: [
+    {
+      spawn: `synth:silent`,
+    },
+    {
+      exec: `sam local invoke -t cdk.out/tesseract-lambda-ci.template.json node20 --no-event > node20-test-output.txt && cat node20-test-output.txt | grep -Eiv \"(fail|error|exception)\"`,
+    },
+  ],
+});
+project.addTask(`test:integration:al2023`, {
+  steps: [
+    {
+      spawn: `test:integration:python312`,
+    },
+    {
+      spawn: `test:integration:node20`,
+    },
+  ],
+});
 const testIntegration = project.addTask(`test:integration`, {
   steps: [
     {
@@ -143,6 +173,9 @@ const testIntegration = project.addTask(`test:integration`, {
     {
       spawn: `test:integration:node`,
     },
+    {
+      spawn: `test:integration:al2023`,
+    },
   ],
 });
 const bundle = project.addTask(`bundle:binary`, {
@@ -150,11 +183,22 @@ const bundle = project.addTask(`bundle:binary`, {
     {
       spawn: `synth:silent`,
     },
+    // AL2 bundling
     {
       exec: `rm -rf ./ready-to-use/amazonlinux-2/*`,
     },
     {
       exec: `cp -r cdk.out/$(cat cdk.out/tesseract-lambda-ci.template.json | jq -r '.Resources.al2layer.Metadata.\"aws:asset:path\"')/. ./ready-to-use/amazonlinux-2`,
+    },
+    // AL2023 bundling
+    {
+      exec: `mkdir -p ./ready-to-use/amazonlinux-2023`,
+    },
+    {
+      exec: `rm -rf ./ready-to-use/amazonlinux-2023/*`,
+    },
+    {
+      exec: `cp -r cdk.out/$(cat cdk.out/tesseract-lambda-ci.template.json | jq -r '.Resources.al2023layer.Metadata.\"aws:asset:path\"')/. ./ready-to-use/amazonlinux-2023`,
     },
   ],
 });
@@ -162,6 +206,7 @@ project.packageTask.prependSpawn(testIntegration);
 project.packageTask.prependSpawn(bundle);
 project.packageTask.prependExec(`mkdir -p ./dist`);
 project.packageTask.exec(`zip -r ../../dist/tesseract-al2-x86.zip .`, { cwd: './ready-to-use/amazonlinux-2' });
+project.packageTask.exec(`zip -r ../../dist/tesseract-al2023-x86.zip .`, { cwd: './ready-to-use/amazonlinux-2023' });
 project.addTask('upgrade:ci:py', {
   steps: [
     {
@@ -209,7 +254,7 @@ project.release?.addJobs({
           GITHUB_REPOSITORY: '${{ github.repository }}',
           GITHUB_REF: '${{ github.ref }}',
         },
-        run: 'errout=$(mktemp); gh release upload $(cat dist/releasetag.txt) --clobber -R $GITHUB_REPOSITORY dist/tesseract-al2-x86.zip 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi',
+        run: 'errout=$(mktemp); gh release upload $(cat dist/releasetag.txt) --clobber -R $GITHUB_REPOSITORY dist/tesseract-al2-x86.zip dist/tesseract-al2023-x86.zip 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi',
       },
     ],
   },

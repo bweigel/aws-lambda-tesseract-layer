@@ -58,6 +58,15 @@
         },
         {
           "exec": "cp -r cdk.out/$(cat cdk.out/tesseract-lambda-ci.template.json | jq -r '.Resources.al2layer.Metadata.\"aws:asset:path\"')/. ./ready-to-use/amazonlinux-2"
+        },
+        {
+          "exec": "mkdir -p ./ready-to-use/amazonlinux-2023"
+        },
+        {
+          "exec": "rm -rf ./ready-to-use/amazonlinux-2023/*"
+        },
+        {
+          "exec": "cp -r cdk.out/$(cat cdk.out/tesseract-lambda-ci.template.json | jq -r '.Resources.al2023layer.Metadata.\"aws:asset:path\"')/. ./ready-to-use/amazonlinux-2023"
         }
       ]
     },
@@ -200,6 +209,10 @@
         {
           "exec": "zip -r ../../dist/tesseract-al2-x86.zip .",
           "cwd": "./ready-to-use/amazonlinux-2"
+        },
+        {
+          "exec": "zip -r ../../dist/tesseract-al2023-x86.zip .",
+          "cwd": "./ready-to-use/amazonlinux-2023"
         }
       ]
     },
@@ -287,6 +300,20 @@
         },
         {
           "spawn": "test:integration:node"
+        },
+        {
+          "spawn": "test:integration:al2023"
+        }
+      ]
+    },
+    "test:integration:al2023": {
+      "name": "test:integration:al2023",
+      "steps": [
+        {
+          "spawn": "test:integration:python312"
+        },
+        {
+          "spawn": "test:integration:node20"
         }
       ]
     },
@@ -301,6 +328,17 @@
         }
       ]
     },
+    "test:integration:node20": {
+      "name": "test:integration:node20",
+      "steps": [
+        {
+          "spawn": "synth:silent"
+        },
+        {
+          "exec": "sam local invoke -t cdk.out/tesseract-lambda-ci.template.json node20 --no-event > node20-test-output.txt && cat node20-test-output.txt | grep -Eiv \"(fail|error|exception)\""
+        }
+      ]
+    },
     "test:integration:python": {
       "name": "test:integration:python",
       "steps": [
@@ -309,6 +347,17 @@
         },
         {
           "exec": "sam local invoke -t cdk.out/tesseract-lambda-ci.template.json python --no-event > py-test-output.txt && cat py-test-output.txt | grep -Eiv \"(fail|error|exception)\""
+        }
+      ]
+    },
+    "test:integration:python312": {
+      "name": "test:integration:python312",
+      "steps": [
+        {
+          "spawn": "synth:silent"
+        },
+        {
+          "exec": "sam local invoke -t cdk.out/tesseract-lambda-ci.template.json python312 --no-event > py312-test-output.txt && cat py312-test-output.txt | grep -Eiv \"(fail|error|exception)\""
         }
       ]
     },

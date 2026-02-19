@@ -35,6 +35,8 @@ layer
 .mypy_cache
 *.zip
 **/*test-output.txt
+py312-test-output.txt
+node20-test-output.txt
 cdk.out/
 /test-reports/
 junit.xml
