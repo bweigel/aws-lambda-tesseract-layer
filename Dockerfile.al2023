@@ -49,6 +49,7 @@ RUN mkdir -p ${DIST}/lib && mkdir -p ${DIST}/bin && \
     cp /usr/lib64/libjpeg.so.62 ${DIST}/lib/ && \
     cp /usr/lib64/libtiff.so.5 ${DIST}/lib/ && \
     cp /usr/lib64/libjbig.so.2.1 ${DIST}/lib/ && \
+    cp /usr/lib64/libwebpmux.so.3.0.10 ${DIST}/lib/libwebpmux.so.3 && \
     echo -e "LEPTONICA_VERSION=${LEPTONICA_VERSION}\nTESSERACT_VERSION=${TESSERACT_VERSION}\nTESSERACT_DATA_FILES=tessdata${TESSERACT_DATA_SUFFIX}/${TESSERACT_DATA_VERSION}\nTESSERACT_DATA_LANGUAGES=osd,eng,${OCR_LANG}" > ${DIST}/TESSERACT-README.md && \
     find ${DIST}/lib -name '*.so*' | xargs strip -s
 
