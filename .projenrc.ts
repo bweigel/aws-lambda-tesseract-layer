@@ -20,7 +20,16 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   srcdir: 'continous-integration',
   // Use built-in dep upgrades
   dependabot: false,
-  gitignore: ['layer', '.serverless', '.mypy_cache', '*.zip', '**/*test-output.txt', 'py312-test-output.txt', 'node20-test-output.txt', 'cdk.out/'],
+  gitignore: [
+    'layer',
+    '.serverless',
+    '.mypy_cache',
+    '*.zip',
+    '**/*test-output.txt',
+    'py312-test-output.txt',
+    'node20-test-output.txt',
+    'cdk.out/',
+  ],
   autoApproveUpgrades: false,
   depsUpgrade: true,
   depsUpgradeOptions: {
