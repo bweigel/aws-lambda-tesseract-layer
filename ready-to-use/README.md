@@ -31,13 +31,12 @@ See main [README.md](../README.md) for usage instructions.
 
 ### Compatible Runtimes
 
-- Python 3.8 ✅ (tested), 3.9, 3.10 ✅ (tested), 3.11
-- Node.js 18 ✅ (tested)
+- Python 3.8, 3.9, 3.10, 3.11
+- Node.js 18
 - Ruby 2.7
 - Java 8 (Corretto), 11 (Corretto)
 - .NET Core 3.1
 
-✅ = Verified working with integration tests
 
 ### Migration
 
