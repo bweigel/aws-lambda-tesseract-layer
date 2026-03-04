@@ -4,15 +4,19 @@ Tesseract OCR Lambda Layer
 ![Tesseract](https://img.shields.io/badge/Tesseract-5.5.2-green?style=flat-square)
 ![Leptonica](https://img.shields.io/badge/Leptonica-1.87.0-green?style=flat-square)
 
-![Examples available for Runtimes](https://img.shields.io/badge/Examples_(Lambda_runtimes)-Python_3.6(AL1),Python_3.8(AL2)-informational?style=flat-square)
+![Examples available for Runtimes](https://img.shields.io/badge/Examples_(Lambda_runtimes)-Python_3.12(AL2023),Node.js_20(AL2023)-informational?style=flat-square)
 ![Examples available for IaC Tools](https://img.shields.io/badge/Examples_(IaC)-Serverless_Framework,_AWS_CDK-informational?style=flat-square)
 
 
 ![Continuos Integration](https://github.com/bweigel/aws-lambda-tesseract-layer/workflows/Continuos%20Integration/badge.svg)
 
-> AWS Lambda layer containing the [tesseract OCR](https://github.com/tesseract-ocr/tesseract) libraries and command-line binary for Lambda Runtimes running on Amazon Linux 1 and 2.
+> AWS Lambda layer containing the [tesseract OCR](https://github.com/tesseract-ocr/tesseract) libraries and command-line binary for Lambda Runtimes running on Amazon Linux 2023 and 2.
 
-> :warning: [The Amazon Linux AMI (Version 1) is being deprecated](https://aws.amazon.com/blogs/aws/update-on-amazon-linux-ami-end-of-life/). Users are advised to not use Lambda runtimes (i.e. Python 3.6) based on this version. Refer also to the [AWS Lambda runtime deprecation policy](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html#runtime-support-policy).
+> :warning: **DEPRECATION NOTICE**:
+> - **Amazon Linux 1 (AL1)**: Removed. No longer supported.
+> - **Amazon Linux 2 (AL2)**: **Deprecated**. Will be removed after 6 months. New projects should use Amazon Linux 2023 (AL2023).
+>   - **Note**: AL2 with Tesseract 5.5+ is not supported in CI due to GCC 7.3.1 lacking C++17 filesystem support. Users can build locally with Tesseract 5.4.x or earlier if AL2 is required.
+> - **Recommended**: Use Amazon Linux 2023 (AL2023) for all new projects.
 
 <!-- TOC -->
 
@@ -26,6 +30,10 @@ Tesseract OCR Lambda Layer
     - [Deployment size optimization](#deployment-size-optimization)
     - [Building the layer binaries directly using CDK](#building-the-layer-binaries-directly-using-cdk)
     - [Layer contents](#layer-contents)
+- [Migration from AL2 to AL2023](#migration-from-al2-to-al2023)
+    - [Why Migrate?](#why-migrate)
+    - [Migration Steps](#migration-steps)
+    - [Common Issues](#common-issues)
 - [Known Issues](#known-issues)
     - [Avoiding Pillow library issues](#avoiding-pillow-library-issues)
     - [Unable to import module 'handler': cannot import name '_imaging'](#unable-to-import-module-handler-cannot-import-name-_imaging)
@@ -35,8 +43,8 @@ Tesseract OCR Lambda Layer
 
 # Quickstart
 
-This repo comes with ready-to-use binaries compiled against the AWS Lambda Runtimes (based on Amazon Linux 1 and 2).
-Example Projects in Python 3.6 (& 3.8) using Serverless Framework and CDK are provided:
+This repo comes with ready-to-use binaries compiled against the AWS Lambda Runtimes (based on Amazon Linux 2023 and 2).
+Example Projects in Python 3.12 and Node.js 20 using Serverless Framework and CDK are provided:
 
 ```bash
 ## Demo using Serverless Framework and prebuilt layer
@@ -130,8 +138,8 @@ You can build layer contents manually with the [provided `Dockerfile`s](#availab
 Build layer using your preferred `Dockerfile`:
 
 ```bash
-## build
-docker build -t tesseract-lambda-layer -f [Dockerfile.al1|Dockerfile.al2] .
+## build (using AL2023 - recommended)
+docker build -t tesseract-lambda-layer -f Dockerfile.al2023 .
 ## run container
 export CONTAINER=$(docker run -d tesseract-lambda-layer false)
 ## copy tesseract files from container to local folder layer
@@ -143,34 +151,40 @@ unset CONTAINER
 
 ## available `Dockerfile`s
 
-| Dockerfile                              | Base-Image     | compatible Runtimes                                                   |
-| :-------------------------------------- | :------------- | :-------------------------------------------------------------------- |
-| `Dockerfile.al1` (:warning: deprecated) | Amazon Linux 1 | Python 2.7/3.6/3.7, Ruby 2.5, Java 8 (OpenJDK), Go 1.x, .NET Core 2.1 |
-| `Dockerfile.al2`                        | Amazon Linux 2 | Python 3.8, Ruby 2.7, Java 8/11 (Coretto), .NET Core 3.1              |
+| Dockerfile                              | Base-Image        | compatible Runtimes                                           | Status             |
+| :-------------------------------------- | :---------------- | :------------------------------------------------------------ | :----------------- |
+| `Dockerfile.al2023` (**recommended**)   | Amazon Linux 2023 | Python 3.12+, Node.js 20+, Ruby 3.2+, Java 17+                | ✅ **Active**      |
+| `Dockerfile.al2`                        | Amazon Linux 2    | Python 3.8-3.11, Node.js 18, Ruby 2.7, Java 8/11              | ⚠️ **Deprecated**  |
+| ~~`Dockerfile.al1`~~                    | ~~Amazon Linux 1~~| ~~Python 2.7/3.6/3.7, Ruby 2.5, Java 8, Go 1.x~~              | ❌ **Removed**     |
 
 
 ## Building a different tesseract version and/or language
 
-Per default the build generates the [tesseract 4.1.3](https://github.com/tesseract-ocr/tesseract/releases/tag/4.1.3) (amazonlinux-1) or [5.2.0](https://github.com/tesseract-ocr/tesseract/releases/tag/5.2.0) (amazonlinux-2) OCR libraries with the _fast_ german, english and osd (orientation and script detection) [data files](https://github.com/tesseract-ocr/tesseract/wiki/Data-Files) included.
+By default, the build generates Tesseract 5.5.2 OCR libraries with the _fast_ german, english and osd (orientation and script detection) [data files](https://github.com/tesseract-ocr/tesseract/wiki/Data-Files) included.
 
-The build process can be modified using different build time arguments (defined as `ARG` in `Dockerfile.al[1|2]`), using the `--build-arg` option of `docker build`.
+The build process can be modified using different build time arguments (defined as `ARG` in `Dockerfile.al2` and `Dockerfile.al2023`), using the `--build-arg` option of `docker build`.
 
-| Build-Argument           | description                                                                                                       | available versions                                                                                                                        |
-| :----------------------- | :---------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
-| `TESSERACT_VERSION`      | the tesseract OCR engine                                                                                          | https://github.com/tesseract-ocr/tesseract/releases                                                                                       |
-| `LEPTONICA_VERSION`      | fundamental image processing and analysis library                                                                 | https://github.com/danbloomberg/leptonica/releases                                                                                        |
-| `OCR_LANG`               | Language to install (in addition to `eng` and `osd`)                                                              | https://github.com/tesseract-ocr/tessdata (`<lang>.traineddata`)                                                                          |
-| `TESSERACT_DATA_SUFFIX`  | Trained LSTM models for tesseract. Can be empty (default), `_best` (best inference) and `_fast` (fast inference). | https://github.com/tesseract-ocr/tessdata, https://github.com/tesseract-ocr/tessdata_best, https://github.com/tesseract-ocr/tessdata_fast |
-| `TESSERACT_DATA_VERSION` | Version of the trained LSTM models for tesseract. (currently - in July 2022 - only `4.1.0` is available)          | https://github.com/tesseract-ocr/tessdata/releases/tag/4.1.0                                                                              |
+| Build-Argument           | description                                                                                                       | default value | available versions                                                                                                                        |
+| :----------------------- | :---------------------------------------------------------------------------------------------------------------- | :------------ | :---------------------------------------------------------------------------------------------------------------------------------------- |
+| `TESSERACT_VERSION`      | the tesseract OCR engine                                                                                          | `5.5.2`       | https://github.com/tesseract-ocr/tesseract/releases                                                                                       |
+| `LEPTONICA_VERSION`      | fundamental image processing and analysis library                                                                 | `1.87.0`      | https://github.com/danbloomberg/leptonica/releases                                                                                        |
+| `OCR_LANG`               | Language to install (in addition to `eng` and `osd`)                                                              | `deu`         | https://github.com/tesseract-ocr/tessdata (`<lang>.traineddata`)                                                                          |
+| `TESSERACT_DATA_SUFFIX`  | Trained LSTM models for tesseract. Can be empty (default), `_best` (best inference) and `_fast` (fast inference). | `_fast`       | https://github.com/tesseract-ocr/tessdata, https://github.com/tesseract-ocr/tessdata_best, https://github.com/tesseract-ocr/tessdata_fast |
+| `TESSERACT_DATA_VERSION` | Version of the trained LSTM models for tesseract                                                                  | `4.1.0`       | https://github.com/tesseract-ocr/tessdata/releases/tag/4.1.0                                                                              |
+| `COMPILER_FLAGS`         | C++ compiler flags for building Tesseract                                                                         | `"-mavx2 -std=c++17"` | Any valid CXXFLAGS (e.g., optimization level, CPU architecture, C++ standard)                                                             |
 
 
 **Example of custom build**
 
 ```bash
-## Build a Dockerimage based on Amazon Linux 2, with French language support
-docker build --build-arg OCR_LANG=fra -t tesseract-lambda-layer-french -f Dockerfile.al2 .
-## Build a Dockerimage based on Amazon Linux 2, with Tesseract 4.0.0 and french language support
-docker build --build-arg TESSERACT_VERSION=4.0.0 --build-arg OCR_LANG=fra -t tesseract-lambda-layer -f Dockerfile.al2 .
+## Build with French language support (recommended)
+docker build --build-arg OCR_LANG=fra -t tesseract-lambda-layer-french -f Dockerfile.al2023 .
+
+## Build with specific Tesseract version and language
+docker build --build-arg TESSERACT_VERSION=5.0.0 --build-arg OCR_LANG=fra -t tesseract-lambda-layer -f Dockerfile.al2023 .
+
+## Build with custom compiler optimizations (e.g., for different CPU architectures)
+docker build --build-arg COMPILER_FLAGS="-march=native -O3 -std=c++17" -t tesseract-lambda-layer-optimized -f Dockerfile.al2023 .
 ```
 
 ## Deployment size optimization
@@ -193,7 +207,101 @@ Refer to [continous-integration](./continous-integration/README.md) and the [cor
 ## Layer contents
 
 The layer contents get deployed to `/opt`, when used by a function. See [here](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html) for details.
-See [ready-to-use](./ready-to-use/) for layer contents for Amazon Linux 1 and Amazon Linux 2 (TODO).
+See [ready-to-use](./ready-to-use/) for layer contents for Amazon Linux 2023 and Amazon Linux 2.
+
+# Migration from AL2 to AL2023
+
+## Why Migrate?
+
+- **Extended Support**: AL2023 receives updates until 2028
+- **Modern Runtimes**: Python 3.12+, Node.js 20+
+- **Performance**: Improved compiler optimizations and newer system libraries
+- **Security**: Latest security patches and cryptographic libraries
+
+## Migration Steps
+
+### 1. Update Runtime
+
+| Current Runtime | → | AL2023 Runtime |
+|-----------------|---|----------------|
+| Python 3.8-3.11 | → | Python 3.12    |
+| Node.js 18      | → | Node.js 20     |
+| Ruby 2.7        | → | Ruby 3.2       |
+
+### 2. Update Layer Reference
+
+**Serverless Framework**:
+```yaml
+# Before
+layers:
+  tesseractAl2:
+    path: ready-to-use/amazonlinux-2
+    compatibleRuntimes:
+      - python3.8
+
+# After
+layers:
+  tesseractAl2023:
+    path: ready-to-use/amazonlinux-2023
+    compatibleRuntimes:
+      - python3.12
+```
+
+**AWS CDK**:
+```typescript
+// Before
+const layer = new lambda.LayerVersion(stack, 'layer', {
+  code: Code.fromAsset('ready-to-use/amazonlinux-2'),
+});
+new lambda.Function(stack, 'fn', {
+  runtime: Runtime.PYTHON_3_8,
+  layers: [layer],
+});
+
+// After
+const layer = new lambda.LayerVersion(stack, 'layer', {
+  code: Code.fromAsset('ready-to-use/amazonlinux-2023'),
+});
+new lambda.Function(stack, 'fn', {
+  runtime: Runtime.PYTHON_3_12,
+  layers: [layer],
+});
+```
+
+### 3. Test Locally
+
+```bash
+# Update dependencies for new runtime
+pip install --upgrade -r requirements.txt  # Python
+npm update                                  # Node.js
+
+# Test with SAM CLI
+sam local invoke --runtime python3.12 ...
+```
+
+### 4. Deploy & Monitor
+
+- Deploy to dev/staging environment first
+- Check CloudWatch logs for compatibility issues
+- Verify OCR functionality works correctly
+- Roll out to production gradually
+
+## Common Issues
+
+**Python 3.12 Compatibility**
+- Some packages need updates for Python 3.12
+- Use `pip install --upgrade` for dependencies
+- Check for deprecated Python APIs
+
+**Node.js Native Modules**
+- Native modules must be recompiled for AL2023
+- Ensure node-gyp is up to date
+- Test with `sam local invoke`
+
+**Library Versions**
+- AL2023 may have different .so library versions
+- Error: "cannot open shared object file"
+- Solution: Use the AL2023 layer (not AL2 layer)
 
 # Known Issues
 ## Avoiding Pillow library issues
