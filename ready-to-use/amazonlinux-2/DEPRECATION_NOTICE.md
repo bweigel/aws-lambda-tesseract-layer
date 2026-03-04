@@ -12,7 +12,7 @@ See the [Migration Guide](../../README.md#migration-from-al2-to-al2023) in the m
 
 ## Timeline
 
-- **Current**: AL2 and AL2023 both supported
+- **Current**: AL2023 fully supported; AL2 binaries available for local builds only
 - **In 6 months**: AL2 removed, AL2023 only
 
 ## Questions?
