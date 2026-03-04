@@ -66,10 +66,8 @@ npm test
 # Synthesize CDK stack (triggers Docker build of layer)
 npm run synth
 
-# Run integration tests (requires Docker and SAM CLI)
-npm run test:integration          # All tests (AL2 and AL2023)
-npm run test:integration:python   # Python 3.10 (AL2) test
-npm run test:integration:node     # Node 18 (AL2) test
+# Run integration tests (requires Docker and SAM CLI, AL2023 only)
+npm run test:integration          # All AL2023 tests
 npm run test:integration:al2023   # AL2023 tests (Python 3.12 + Node.js 20)
 npm run test:integration:python312 # Python 3.12 (AL2023) test
 npm run test:integration:node20   # Node.js 20 (AL2023) test
