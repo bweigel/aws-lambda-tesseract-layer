@@ -60,4 +60,6 @@ junit.xml
 /cdk.out/
 .cdk.staging/
 .parcel-cache/
+!/.github/workflows/upgrade_aws-lambda-tesseract-layer-example.yml
+!/.github/workflows/upgrade_node-lambda.yml
 !/.projenrc.ts
