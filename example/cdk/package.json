@@ -1,25 +1,25 @@
 {
   "name": "aws-lambda-tesseract-layer-example",
   "scripts": {
-    "build": "npx projen build",
-    "bundle": "npx projen bundle",
-    "compile": "npx projen compile",
-    "default": "npx projen default",
-    "deploy": "npx projen deploy",
-    "destroy": "npx projen destroy",
-    "diff": "npx projen diff",
-    "eslint": "npx projen eslint",
-    "package": "npx projen package",
-    "post-compile": "npx projen post-compile",
-    "post-upgrade": "npx projen post-upgrade",
-    "pre-compile": "npx projen pre-compile",
-    "synth": "npx projen synth",
-    "synth:silent": "npx projen synth:silent",
-    "test": "npx projen test",
-    "test:watch": "npx projen test:watch",
-    "upgrade": "npx projen upgrade",
-    "watch": "npx projen watch",
-    "projen": "npx projen"
+    "build": "projen build",
+    "bundle": "projen bundle",
+    "compile": "projen compile",
+    "default": "projen default",
+    "deploy": "projen deploy",
+    "destroy": "projen destroy",
+    "diff": "projen diff",
+    "eslint": "projen eslint",
+    "package": "projen package",
+    "post-compile": "projen post-compile",
+    "post-upgrade": "projen post-upgrade",
+    "pre-compile": "projen pre-compile",
+    "synth": "projen synth",
+    "synth:silent": "projen synth:silent",
+    "test": "projen test",
+    "test:watch": "projen test:watch",
+    "upgrade": "projen upgrade",
+    "watch": "projen watch",
+    "projen": "projen"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^2",
@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "aws-cdk-lib": "^2.55.0",
-    "constructs": "^10.0.5"
+    "constructs": "^10.5.1"
   },
   "license": "UNLICENSED",
   "publishConfig": {
