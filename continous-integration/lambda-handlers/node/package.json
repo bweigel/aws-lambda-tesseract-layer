@@ -14,8 +14,8 @@
     "projen": "projen"
   },
   "devDependencies": {
-    "esbuild": "^0.17.5",
-    "jest": "^29.4.1",
+    "esbuild": "^0.28.0",
+    "jest": "^29.7.0",
     "jest-junit": "^16"
   },
   "dependencies": {
