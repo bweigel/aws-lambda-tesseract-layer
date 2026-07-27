@@ -1,7 +1,7 @@
 Tesseract OCR Lambda Layer
 ===
 
-![Tesseract](https://img.shields.io/badge/Tesseract-5.5.2-green?style=flat-square)
+![Tesseract](https://img.shields.io/badge/Tesseract-5.5.3-green?style=flat-square)
 ![Leptonica](https://img.shields.io/badge/Leptonica-1.87.0-green?style=flat-square)
 
 ![Examples available for Runtimes](https://img.shields.io/badge/Examples_(Lambda_runtimes)-Python_3.12(AL2023),Node.js_20(AL2023)-informational?style=flat-square)
